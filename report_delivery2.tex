@@ -1,0 +1,195 @@
+\documentclass{report}[a4paper]
+% Decent underlines
+\usepackage[normalem]{ulem}
+% Hyperreferences
+\usepackage{hyperref}
+% Margins
+\usepackage[top=35mm,bottom=35mm,left=25mm,right=25mm]{geometry}
+% Graphics and images
+\usepackage{graphicx} \graphicspath{{./images/}}
+\usepackage{subcaption}
+\usepackage{float}
+% Encodings (to render letters with diacritics and special characters)
+\usepackage[utf8]{inputenc}
+% Language
+\usepackage[english]{babel}
+% Section pagebreaks
+%\usepackage{titlesec}
+%\newcommand{\sectionbreak}{\clearpage}
+%\newcommand{\sectionnobreak}{% for when I want a section that does not break
+%  \global\toggletrue{afterpart}%
+%  \section
+%}
+% Source code
+\usepackage{listings}
+\usepackage{xcolor}
+\renewcommand{\lstlistingname}{File}
+\lstset{
+    frame=tb, % draw frame at top and bottom of the code
+    tabsize=4, % tab space width
+    numbers=left, % display line numbers on the left
+	showstringspaces=false, % don't mark spaces in strings    
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{blue}, % keyword color
+    stringstyle=\color{red} % string color
+}
+\lstdefinelanguage{Maxima}{
+	keywords={log,jacobian,determinant,subst},
+	sensitive=true,
+	comment=[n][\itshape]{/*}{*/}
+}
+% Tables with bold rows
+\usepackage{tabularx}
+\newcommand\setrow[1]{\gdef\rowmac{#1}#1\ignorespaces}
+\newcommand\clearrow{\global\let\rowmac\relax}
+\clearrow
+\usepackage{multirow}
+% Math stuff
+\usepackage[mathscr]{euscript}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}} % scientific notation
+% Definitions, theorems, remarks,...
+\usepackage{amsthm}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\renewcommand\qedsymbol{$\blacksquare$}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+% Contents title
+\addto\captionsenglish{\renewcommand*\contentsname{Table of contents}}
+% Headers and footers
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{ \fancyplain{}{Post office management database - Delivery II (BDAD 2019/20)}}
+\lfoot{ \fancyplain{}{Group 605}}
+\rfoot{ \fancyplain{}{\thepage} }
+%
+\newcommand{\email}[1]{
+{\texttt{\href{mailto:#1}{#1}} }
+}
+% Metadata
+\title{\Huge Post office management database \\ \Large Delivery II \\ \vspace*{4pt} \large BDAD 2019/20}
+\author{
+Group 605 \vspace{0.5em} \\
+\begin{tabular}{r l}
+	\email{up201806429@fe.up.pt} & Diogo Miguel Ferreira Rodrigues        \\
+	\email{up201806613@fe.up.pt} & João António Cardoso Vieira e Basto de Sousa \\
+	\email{up201806330@fe.up.pt} & Rafael Soares Ribeiro \\
+\end{tabular}
+}
+\date{05/04/2020}
+% Document
+\begin{document}
+\maketitle
+\setcounter{tocdepth}{2}
+\tableofcontents
+\chapter{Introduction}
+This preliminary report further details the project we proposed, evidently showing some minor changes that reflect a more adequate representation of the database required to solve the problem of managing a single post office, deliberately making little to no reference to the workings of a Postal Service given its complexity would greatly surpass recommendations. \par
+A postal service is made up of post offices, where each post office has its own set of employees, vehicles and other attributes. The deliveries each have elements that influence its price as well as the ways they may be delivered and paid for, all of which will be explained more thoroughly through this report.
+\chapter{Conceptual model}
+\section{Description}
+\subsection{General classes}
+\subsubsection{ZipCode}
+ZIP code, characterized by its number and country (pair of attributes that is also its primary key), as well as by the town and by the postman in charge of distributing mail to postal addresses under that ZIP code.
+\subsubsection{Address}
+An address is identified by its unique ID, by the street name, street number, door number, postal code, town and country.
+\subsubsection{PAddress}
+A postal address extends an address by also mentioning a person name (addresser or addressee), thus being a subclass of Address. Besides mentioning an origin and destination, a delivery must also mention who the addresser and the addressee are, thus requiring a PAddress instead of an Address.
+\subsection{PostalService}
+A postal service has a unique ID, a name and a VAT number, besides having physical locations designated hereinafter post offices, one of them being the headquarters. In this project, a PostalService serves the main purpose of storing the VAT and name of the entity that sells goods to clients, which avoids the need for thorough description of the workings of a PostalService that are not directly handled by a PostOffice.
+\subsubsection{PostOffice}
+Post offices are places of contact between the postal service and the clients, where services are provided and purchases take place. A PostOffice is associated with a single PostalService.\par
+It is uniquely identified by an ID, and characterized also by its address, a list of employees, and by the assigned vehicles. For this reason, it is directly connected to the classes PostalService, Address, Employee and Vehicle.
+\subsubsection{Vehicle}
+A vehicle is used to deliver mail and cannot be assigned to time-overlapping orders, given it can only fulfill an order at a time. It is uniquely identified by its license plate, and for each vehicle we know its capacity, that is, the maximum weight it can carry.
+\subsubsection{Motorbike}
+A motorbike is a vehicle which can be used to fulfill light orders, thus being a subclass of Vehicle. A light order can otherwise be fulfilled by foot.
+\subsubsection{Van}
+Like the motorbike, the van extends the class Vehicle, but unlike the motorbike, it can be used to deliver general orders.
+\subsection{Person}
+For every person we know the VAT number (also serving as a person ID), name, address, and phone number.
+\subsubsection{Client}
+A client is a person which may pay for a good or service via a Bill.
+\subsubsection{Employee}
+An employee is a person (thus a subclass of Person) that is employed by the company, which provides him/her with a salary. For every employee we know his base salary.
+\subsubsection{Manager}
+A manager is an employee who is responsible for monitoring a set of sales employees and postmen.
+\subsubsection{ShopKeeper}
+A shopKeeper is a sales Employee (thus extending the class Employee) who is responsible for processing sales and registering deliveries that were paid for at the PostOffice or mail collected from post boxes.
+\subsubsection{Postman}
+A postman is an employee (therefore being a subclass of Employee) responsible for home-to-home mail distribution. A postman is assigned a group of ZIP codes.
+\subsection{Delivery}
+A delivery is requested by the client and registered by a shopKeeper. \par
+Identifiable by its ID, each delivery keeps track of the time of registration, weight, and the postal addresses of the origin and destination (thus connecting this class to PAddress). A delivery’s price is determined not only by the type of service chosen (Economy, Express or Registered) but also by its category; it is classified as a Document if it weighs under 0.100kg, as Parcel if under 2.000kg or Overweight otherwise.\par
+Depending on the delivery, its payment can be done either by the purchase of a stamp (which is only valid should the delivery’s category be Document) and deposit at a postbox, or via a bill.
+\subsubsection{Order}
+An order corresponds to a request of transporting a deliverable to its destination.\par
+It is characterized by its identification number as well as by the postman assigned to its delivery, by the vehicle used for that end and by the scheduled time of departure from, and arrival to, the post office by the postman.\par
+It can either be a General Order or a Light Order depending on the category (and therefore on the weight) of the deliverables: light orders can only be used for deliveries which have Documents as its category.
+\subsubsection{Stamp}
+A stamp is an alternative to paying for a Document using a bill. A stamped document can be deposited in a postbox. Given stamps are specialized according to the service that will be used in transporting the Document, Stamp is associated to the class Service.
+\subsection{Bill}
+A bill can be used to buy products at a PostOffice, as well as to pay for any kind of deliverable. A bill is described by its bill number, price (which is the sum of prices of the items of the delivery plus any other item bought at the PostOffice), issue time, issuing shopKeeper, the client that paid for it and the seller, which is the company to which the client is paying for a delivery.
+\subsubsection{CatalogItem}
+A catalog item has a corresponding ID (similar to a barcode), description and current price. The list of all catalog items make up the catalog of products the PostalService has for sale.
+\subsubsection{BillItem}
+A bill item represents a particular line in a Bill, meaning it identifies the kind of CatalogItem being bought, the price per unit at the moment it was bought, and the amount, for which a client paid a given sum. It is identifiable by the bill it belongs to, plus an additional ID to identify it among other BillItems in the same Bill.
+\section{UML}
+\begin{figure}[H] \centering
+	\includegraphics[angle=-90,scale=0.377]{uml2}
+	\caption{Database UML}
+\end{figure}
+\chapter{Relational model}
+\begin{center} \setlength{\tabcolsep}{1pt}
+    \begin{tabular}{r p{144mm}}
+        ZipCode         & (\uline{country}, \uline{number}, town, postman$\rightarrow$Postman)  \\
+        Address         & (\uline{idAddress}, (zipNumber,zipCountry)$\rightarrow$ZipCode, streetName, streetNumber, doorNumber, personName) \\
+        PostalService   & (\uline{vat}, name, headquarters$\rightarrow$PostOffice)              \\
+        PostOffice      & (\uline{idPostOffice}, name, address$\rightarrow$Address, postalService$\rightarrow$PostalService) \\
+        Vehicle         & (\uline{licensePlate}, postOffice$\rightarrow$PostOffice, maxWeight, type) \\
+                        & $\text{type} \in \{\text{"motorbike"}, \text{"van"}\}$\\
+        Person          & (\uline{vat}, name, address$\rightarrow$Address, phoneNumber)         \\
+        Client          & (\uline{vat}$\rightarrow$Person)                                      \\
+        Employee        & (\uline{vat}$\rightarrow$Person, postOffice$\rightarrow$PostOffice, salary) \\
+        Manager         & (\uline{vat}$\rightarrow$Employee)                                    \\
+        ShopKeeper      & (\uline{vat}$\rightarrow$Employee, supervisor$\rightarrow$Manager)    \\
+        Postman         & (\uline{vat}$\rightarrow$Employee, supervisor$\rightarrow$Manager)    \\
+        Delivery        & (\uline{idDelivery}, from$\rightarrow$PAddress, to$\rightarrow$PAddress, registeredBy$\rightarrow$ShopKeeper, order$\rightarrow$Order, timeRegister, weight, category, service, payMethod) \\
+                        & payMethod$\rightarrow$Bill or payMethod$\rightarrow$Service \\
+        Order           & (\uline{idOrder}, timeBegin, timeEnd, type, vehicle$\rightarrow$Vehicle, postman$\rightarrow$Postman) \\
+                        & $\text{type} \in \{\text{"generalOrder"}, \text{"lightOrder"}\}$\\
+        Bill            & (\uline{numBill}, \uline{seller}$\rightarrow$PostalService, timeIssue, price, consumer$\rightarrow$Client, issuer$\rightarrow$ShopKeeper)                                   \\
+        CatalogItem     & (\uline{idCatalogItem}, description, price)                           \\
+        BillItem        & (\uline{bill}$\rightarrow$Bill, \uline{catalogItem}$\rightarrow$CatalogItem, priceThen, amount) \\
+        Price           & (\uline{category}$\rightarrow$Category, \uline{service}$\rightarrow$Service, price)
+    \end{tabular}
+\end{center}
+\chapter{Functional dependencies and normal forms}
+\subsubsection{ZipCode}
+$\{\text{country},\text{number}\} \rightarrow \{\text{town, postman}\}$
+\subsubsection{Address}
+$\{\text{idAddress}\} \rightarrow \{\text{zipNumber}, \text{zipCountry}, \text{streetName}, \text{streetNumber}, \text{doorNumber}, \text{personName}\}$
+\subsubsection{PostalService}
+$\{\text{vat}\} \rightarrow \{\text{name},\text{headquarters}\}$
+\subsubsection{PostOffice}
+\subsubsection{Vehicle}
+\subsubsection{Person}
+\subsubsection{Client}
+\subsubsection{Employee}
+\subsubsection{Manager}
+\subsubsection{ShopKeeper}
+\subsubsection{Postman}
+\subsubsection{Delivery}
+$\{\text{weight}\} \rightarrow \{\text{category}\}$
+\subsubsection{Order}
+\subsubsection{Bill}
+\subsubsection{CatalogItem}
+\subsubsection{BillItem}
+\subsubsection{Price}
+
+\end{document}
