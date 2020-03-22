@@ -13,13 +13,6 @@
 \usepackage[utf8]{inputenc}
 % Language
 \usepackage[english]{babel}
-% Section pagebreaks
-%\usepackage{titlesec}
-%\newcommand{\sectionbreak}{\clearpage}
-%\newcommand{\sectionnobreak}{% for when I want a section that does not break
-%  \global\toggletrue{afterpart}%
-%  \section
-%}
 % Source code
 \usepackage{listings}
 \usepackage{xcolor}
@@ -65,9 +58,10 @@
 \usepackage{fancyhdr}
 \pagestyle{fancyplain}
 \fancyhf{}
-\lhead{ \fancyplain{}{Post office management database - Delivery II (BDAD 2019/20)}}
-\lfoot{ \fancyplain{}{Group 605}}
-\rfoot{ \fancyplain{}{\thepage} }
+\lhead{\fancyplain{}{Post office management database — Delivery II (BDAD 2019/20)}}
+\rhead{\fancyplain{}{Group 605}}
+\lfoot{\fancyplain{}{\leftmark}}
+\rfoot{\thepage}
 %
 \newcommand{\email}[1]{
 {\texttt{\href{mailto:#1}{#1}} }
