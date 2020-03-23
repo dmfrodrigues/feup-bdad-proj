@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS ShopKeeper;
 DROP TABLE IF EXISTS Postman;
 DROP TABLE IF EXISTS Delivery;
 DROP TABLE IF EXISTS Category;
-DROP TABLE IF EXISTS Service;
+DROP TABLE IF EXISTS Service_;
 DROP TABLE IF EXISTS Order_;                    -- Order is a reserved keyword
 DROP TABLE IF EXISTS Bill;
 DROP TABLE IF EXISTS CatalogItem;
@@ -104,13 +104,8 @@ CREATE TABLE Delivery (
     order_          INT         NULL REFERENCES Order_(id)  ,
     timeRegister    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP   ,
     weight          FLOAT       CHECK (weight > 0)          ,
-    service         VARCHAR(31) REFERENCES Service(name)
+    service         VARCHAR(31) REFERENCES Service(name_)
 );
-
---CREATE FUNCTION getCategory(@weight AS FLOAT) RETURNS VARCHAR(31)
---BEGIN
---    SELECT * FROM Category
---END
 
 CREATE TABLE Category (
     name_           VARCHAR(31) NOT NULL                    ,
@@ -122,12 +117,12 @@ CREATE TABLE Service_ (
 );
 
 CREATE TABLE Order_ (
-    idOrder         INT         PRIMARY KEY ,
-    timeBegin       CHAR(10)                ,               -- "DD-MM-YYYY"
-    timeEnd         CHAR(10)                ,
-    type_           CHAR(12)    CHECK (type_ in ('generalOrder', 'lightOrder')),
-    vehicle_        VARCHAR(31) REFERENCES Vehicle_,
-    postman         CHAR(15)    REFERENCES Postman
+    id          INT         PRIMARY KEY                                     ,
+    timeBegin   CHAR   (10)                                                 ,               -- "DD-MM-YYYY"
+    timeEnd     CHAR   (10)                                                 ,
+    type_       CHAR   (12) CHECK (type_ in ('generalOrder', 'lightOrder')) ,
+    vehicle     VARCHAR(31) REFERENCES Vehicle(plate)                       ,
+    postman     CHAR   (15) REFERENCES Postman
 );
 
 CREATE TABLE Bill (
