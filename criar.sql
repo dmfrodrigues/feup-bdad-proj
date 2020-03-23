@@ -45,64 +45,64 @@ CREATE TABLE Address_ (             -- Address
 
 CREATE TABLE PostalService (
     vat             CHAR   ( 15) PRIMARY KEY,
-    name            VARCHAR(255) NOT NULL   ,   -- Name is a reserved keyword (?)
+    name_           VARCHAR(255) NOT NULL   ,   -- Name is a reserved keyword (?)
     hq              INT          REFERENCES PostOffice(id)
 );
 
 CREATE TABLE PostOffice (
     id              INT          PRIMARY KEY    ,
-    name            VARCHAR(255) NOT NULL UNIQUE,
-    address         INT          REFERENCES Address_(id),
+    name_           VARCHAR(255) NOT NULL UNIQUE,
+    address_        INT          REFERENCES Address_(id),
     postalService   CHAR   ( 15) REFERENCES PostalService(vat)
 );
 
 CREATE TABLE Vehicle (
-    plate       CHAR(15)    PRIMARY KEY                         ,
-    postOffice  INT         REFERENCES PostOffice(id)           ,
-    maxWeight   FLOAT       CHECK (maxWeight > 0)               ,
-    type        CHAR(15)    CHECK (type in ('motorbike', 'van'))
+    plate           CHAR(15)    PRIMARY KEY                         ,
+    postOffice      INT         REFERENCES PostOffice(id)           ,
+    maxWeight       FLOAT       CHECK (maxWeight > 0)               ,
+    type_           CHAR(15)    CHECK (type_ in ('motorbike', 'van'))
 );
 
 CREATE TABLE Person (
-    vat         CHAR   ( 15) PRIMARY KEY            ,
-    name        VARCHAR(255) NOT NULL               ,
-    address     INT          REFERENCES Address_(id),
-    phoneNumber CHAR   ( 31)                        
+    vat             CHAR   ( 15) PRIMARY KEY            ,
+    name_           VARCHAR(255) NOT NULL               ,
+    address_        INT          REFERENCES Address_(id),
+    phoneNumber     CHAR   ( 31)                        
 );
 
 CREATE TABLE Client (
-    vat         CHAR(15) PRIMARY KEY REFERENCES Person
+    vat             CHAR(15) PRIMARY KEY REFERENCES Person
 );
 
 CREATE TABLE Employee (
-    vat         CHAR   (15)     PRIMARY KEY REFERENCES Person   ,
-    postOffice  INT             REFERENCES PostOffice(id)       ,
-    salary      DECIMAL(38, 2)  NOT NULL CHECK (salary >= 0)
+    vat             CHAR   (15)     PRIMARY KEY REFERENCES Person   ,
+    postOffice      INT             REFERENCES PostOffice(id)       ,
+    salary          DECIMAL(38, 2)  NOT NULL CHECK (salary >= 0)
 );
 
 CREATE TABLE Manager (
-    vat         CHAR(15) PRIMARY KEY REFERENCES Employee
+    vat             CHAR(15) PRIMARY KEY REFERENCES Employee
 );
 
 CREATE TABLE ShopKeeper (
-    vat         CHAR(15) PRIMARY KEY REFERENCES Employee,
-    supervisor  CHAR(15) REFERENCES Manager
+    vat             CHAR(15) PRIMARY KEY REFERENCES Employee,
+    supervisor      CHAR(15) REFERENCES Manager
 );
 
 CREATE TABLE Postman (
-    vat         CHAR(15) PRIMARY KEY REFERENCES Employee,
-    supervisor  CHAR(15) REFERENCES Manager
+    vat             CHAR(15) PRIMARY KEY REFERENCES Employee,
+    supervisor      CHAR(15) REFERENCES Manager
 );
 
 CREATE TABLE Delivery (
     id              INT         PRIMARY KEY                 ,
-    from            INT         NULL REFERENCES Address_(id),
-    to              INT         REFERENCES Address_(id)     ,
+    from_           INT         NULL REFERENCES Address_(id),
+    to_             INT         REFERENCES Address_(id)     ,
     registeredBy    CHAR(15)    REFERENCES ShopKeeper(vat)  ,
-    order           INT         NULL REFERENCES Order_(id)  ,
+    order_          INT         NULL REFERENCES Order_(id)  ,
     timeRegister    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP   ,
-    weight          FLOAT       CHECK (weight > 0)          ,
-    service         VARCHAR(31) REFERENCES Service(name)    ,
+    weight_         FLOAT       CHECK (weight_ > 0)         ,
+    service_        VARCHAR(31) REFERENCES Service_(name_)  ,
 );
 
 --CREATE FUNCTION getCategory(@weight AS FLOAT) RETURNS VARCHAR(31)
@@ -111,10 +111,24 @@ CREATE TABLE Delivery (
 --END
 
 CREATE TABLE Category (
-    name        VARCHAR(31) NOT NULL                    ,
-    maxWeight   FLOAT       UNIQUE CHECK(maxWeight > 0)
+    name_           VARCHAR(31) NOT NULL                    ,
+    maxWeight       FLOAT       UNIQUE CHECK(maxWeight > 0)
 );
 
-CREATE TABLE Service (
-    name    VARCHAR(31) NOT NULL
+CREATE TABLE Service_ (
+    name_           VARCHAR(31) NOT NULL
+);
+
+CREATE TABLE Order_ (
+    idOrder         INT         PRIMARY KEY ,
+    timeBegin       CHAR(10)                ,               -- "DD-MM-YYYY"
+    timeEnd         CHAR(10)                ,
+    type_           CHAR(12)    CHECK (type_ in ('generalOrder', 'lightOrder')),
+    vehicle_        VARCHAR(31) REFERENCES Vehicle_,
+    postman         CHAR(15)    REFERENCES Postman
+);
+
+CREATE TABLE Bill (
+    numBill         INT         PRIMARY KEY ,
+
 );
