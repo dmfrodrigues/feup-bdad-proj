@@ -118,17 +118,17 @@ CREATE TABLE Service_ (
 
 CREATE TABLE Order_ (
     id          INT         PRIMARY KEY                                     ,
-    timeBegin   CHAR   (10)                                                 ,               -- "DD-MM-YYYY"
-    timeEnd     CHAR   (10)                                                 ,
+    timeBegin       CHAR(19)                ,               -- "DD-MM-YYYY HH:MM:SS"
+    timeEnd         CHAR(19)                ,
     type_       CHAR   (12) CHECK (type_ in ('generalOrder', 'lightOrder')) ,
     vehicle     VARCHAR(31) REFERENCES Vehicle(plate)                       ,
-    postman     CHAR   (15) REFERENCES Postman
+    postman     CHAR   (15) REFERENCES Postman(vat)
 );
 
 CREATE TABLE Bill (
     numBill         INT                                         ,
     seller          CHAR(15)    REFERENCES PostalService(vat)   ,
-    timeIssue       CHAR(10)                                    ,
+    timeIssue       CHAR(19)                                    ,
     price           INT                                         ,
     consumer        CHAR(15)    REFERENCES Client(vat)          ,
     issuer          CHAR(15)    REFERENCES ShopKeeper(vat)      ,
