@@ -180,9 +180,10 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{PostOffice}
 \begin{alignat*}{2}
-    \{\text{idPostOffice}\} \rightarrow \{\text{name},\text{address},\text{postalService}\}
+    \{\text{idPostOffice}\} &\rightarrow \{\text{name},\text{address},\text{postalService}\} \\
+    \{\text{name}\} &\rightarrow \{\text{idPostOffice}\} \\
 \end{alignat*}
-This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
+This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey (including $\{\text{name}\}$, given that $\{\text{name}\}^+ = \{\text{name}, \text{idPostOffice}\}^+ = \{\text{name}, \text{idPostOffice}, \text{address}, \text{postalService}\}$). Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Vehicle}
 \begin{alignat*}{2}
     \{\text{licensePlate}\} \rightarrow \{\text{postOffice},\text{maxWeight},\text{type}\}
@@ -256,37 +257,53 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 
 \chapter{Restrictions}
 \subsubsection{ZipCode}
-PRIMARY KEY $\{\text{country},\text{number}\}$\\
-town NOT NULL \\
-FOREIGN KEY $\{\text{postman}\}$ REFERENCES Postman
+\begin{itemize}
+    \item CONSTRAINT PK\_ZipCode PRIMARY KEY (country, number)
+    \item town NOT NULL
+    \item CONSTRAINT FK\_ZipCode\_Postman FOREIGN KEY (postman) REFERENCES Postman(vat)
+\end{itemize}
 \subsubsection{Address}
-PRIMARY KEY $\{\text{idAddress}\}$ \\
-FOREIGN KEY $\{\text{zipNumber},\text{country}\}$ REFERENCES ZipCode \\
-streetName NOT NULL \\
-streetNumber NOT NULL
+\begin{itemize}
+    \item CONSTRAINT PK\_Address PRIMARY KEY (idAddress)
+    \item CONSTRAINT FK\_Address\_ZipCode FOREIGN KEY (zipNumber, country) REFERENCES ZipCode(number, country)
+    \item streetName NOT NULL
+    \item streetNumber NOT NULL
+\end{itemize}
 \subsubsection{PostalService}
-PRIMARY KEY vat \\
-name NOT NULL \\
-FOREIGN KEY $\{\text{headquarters}\}$ REFERENCES PostOffice
+\begin{itemize}
+    \item CONTRAINT PK\_PostalService PRIMARY KEY (vat)
+    \item name NOT NULL UNIQUE
+    \item CONSTRAINT FK\_PostalService\_PostOffice FOREIGN KEY (headquarters) REFERENCES PostOffice(idPostOffice)
+\end{itemize}
 \subsubsection{PostOffice}
-PRIMARY KEY idPostOffice \\
-name NOT NULL UNIQUE \\
-FOREIGN KEY $\{\text{address}\}$ REFERENCES Address\\
-FOREIGN KEY $\{\text{postalService}\}$ REFERENCES PostalService\\
+\begin{itemize}
+    \item CONSTRAINT PK\_PostOffice PRIMARY KEY (idPostOffice)
+    \item name NOT NULL UNIQUE
+    \item CONSTRAINT FK\_PostOffice\_Address FOREIGN KEY (address) REFERENCES Address(idAddress)
+    \item FOREIGN KEY $\{\text{postalService}\}$ REFERENCES PostalService
+\end{itemize}
 \subsubsection{Vehicle}
-PRIMARY KEY licensePlate \\
-FOREIGN KEY $\{\text{postOffice}\}$ REFERENCES PostOffice \\
-CHECK (maxWeight > 0) \\
-CHECK (type in ('motorbike', 'van'))
+\begin{itemize}
+    \item PRIMARY KEY licensePlate
+    \item FOREIGN KEY $\{\text{postOffice}\}$ REFERENCES PostOffice
+    \item CHECK (maxWeight > 0)
+    \item CHECK (type in ('motorbike', 'van'))
+\end{itemize}
 \subsubsection{Person}
-PRIMARY KEY vat \\
-name NOT NULL \\
-FOREIGN KEY $\{\text{address}\}$ REFERENCES Address \\
-phoneNumber NOT NULL
+\begin{itemize}
+    \item PRIMARY KEY vat
+    \item name NOT NULL
+    \item FOREIGN KEY $\{\text{address}\}$ REFERENCES Address
+    \item phoneNumber NOT NULL
+\end{itemize}
 \subsubsection{Client}
-PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+\begin{itemize}
+    \item PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+\end{itemize}
 \subsubsection{Employee}
-PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+\begin{itemize}
+    \item PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+\end{itemize}
 \subsubsection{Manager}
 \subsubsection{ShopKeeper}
 \subsubsection{Postman}
