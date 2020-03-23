@@ -104,6 +104,11 @@ CREATE TABLE Delivery (
     service         VARCHAR(31) REFERENCES Service(name)    ,
 );
 
+--CREATE FUNCTION getCategory(@weight AS FLOAT) RETURNS VARCHAR(31)
+--BEGIN
+--    SELECT * FROM Category
+--END
+
 CREATE TABLE Category (
     name        VARCHAR(31) NOT NULL                    ,
     maxWeight   FLOAT       UNIQUE CHECK(maxWeight > 0)
