@@ -23,26 +23,32 @@ DROP TABLE IF EXISTS CatalogItem;
 DROP TABLE IF EXISTS BillItem;
 DROP TABLE IF EXISTS Price;
 
-
 CREATE TABLE ZipCode (
-    country varchar(255),
-    number_ int,                    -- Number is a reserved keyword
-    town varchar(255),
-    -- postman
+    country varchar( 2)         ,   -- ISO 3166-1 alpha-2 country code (PT for Portugal)
+    code    varchar(12)         ,   -- Postal code (alphanumeric and dashes)
+    town    varchar(63) NOT NULL,   -- Town name
+    postman varchar(15)         ,   -- Postman VAT number
+    CONSTRAINT PK_ZipCode PRIMARY KEY (country, code),
+    CONSTRAINT FK_ZipCode_Postman FOREIGN KEY (postman) REFERENCES Postman(vat)
 );
 
 CREATE TABLE Address_ (             -- Address
-    idAddress int,
-    -- zipNumber, country
-    streetName varchar(255),
-    streetNumber int,
-    doorNumber int,
-    personName varchar(255),        -- Person that lives at this address?
+    idAddress       int                     ,
+    zipCode         varchar( 12)            ,   -- Postal code
+    country         varchar(  2)            ,   -- Country code
+    streetName      varchar(255) NOT NULL   ,   -- Street name
+    streetNumber    varchar( 15) NOT NULL   ,   -- Street number (main door number, may not have number: s/n)
+    doorNumber      varchar( 15)            ,   -- Door number if in an appartment block
+    personName      varchar(255)            ,   -- Addresser or addressee if applicable
+    CONSTRAINT PK_Address PRIMARY KEY (idAddress),
+    CONSTRAINT FK_Address_ZipCode FOREIGN KEY (zipCode, country) REFERENCES ZipCode(code, country)
 );
 
 CREATE TABLE PostalService (
-    vat int,
-    name varchar(255),              -- Name is a reserved keyword
-    -- headquarters
+    vat             varchar( 15)                ,
+    name            varchar(255) NOT NULL UNIQUE,           -- Name is a reserved keyword
+    headquarters    int                         ,
+    CONSTRAINT PK_PostalService PRIMARY KEY (vat),
+    CONSTRAINT FK_PostalService_PostOffice FOREIGN KEY (headquarters) REFERENCES PostOffice(idPostOffice)
 );
 
