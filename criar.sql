@@ -24,82 +24,92 @@ DROP TABLE IF EXISTS CatalogItem;
 DROP TABLE IF EXISTS BillItem;
 DROP TABLE IF EXISTS Price;
 
-
 CREATE TABLE ZipCode (
-    country         varchar(255),
-    number_         int,                        -- Number is a reserved keyword
-    town            varchar(255),
-    postman     Postman,                        -- Is this correct?
-    PRIMARY KEY (country, number_)              -- Number is a reserved keyword
-
+    country CHAR   ( 2)                         ,   -- ISO 3166-1 alpha-2 country code (PT for Portugal)
+    code    CHAR   (12)                         ,   -- Postal code (alphanumeric and dashes)
+    town    VARCHAR(63) NOT NULL                ,   -- Town name
+    postman CHAR   (15) REFERENCES Postman(vat) ,   -- Postman VAT number
+    PRIMARY KEY (country, code)
 );
 
-CREATE TABLE Address_ (                         -- Address
-    idAddress       int PRIMARY KEY,
-    -- zipNumber, country
-    streetName      varchar(255),
-    streetNumber    int,
-    doorNumber      int,
-    personName      varchar(255),               -- Person that lives at this address?
+CREATE TABLE Address_ (             -- Address
+    id              INT          PRIMARY KEY,
+    zipCode         CHAR   ( 12)            ,   -- Postal code
+    country         CHAR   (  2)            ,   -- Country code
+    streetName      VARCHAR(255) NOT NULL   ,   -- Street name
+    streetNumber    VARCHAR( 15) NOT NULL   ,   -- Street number (main door number, may not have number: s/n)
+    doorNumber      VARCHAR( 15)            ,   -- Door number if in an appartment block
+    personName      VARCHAR(255)            ,   -- Addresser or addressee if applicable
+    FOREIGN KEY (zipCode, country) REFERENCES ZipCode(code, country)
 );
 
 CREATE TABLE PostalService (
-    vat             int PRIMARY KEY,
-    name_           varchar(255),               -- Name is a reserved keyword
-    -- headquarters
+    vat             CHAR   ( 15) PRIMARY KEY,
+    name            VARCHAR(255) NOT NULL   ,   -- Name is a reserved keyword (?)
+    hq              INT          REFERENCES PostOffice(id)
 );
 
-CREATE TABLE PostalOffice (
-    idPostOffice    int PRIMARY KEY,
-    name_           varchar(255),               -- Name is a reserved keyword
-    -- address
-    -- postalService
+CREATE TABLE PostOffice (
+    id              INT          PRIMARY KEY    ,
+    name            VARCHAR(255) NOT NULL UNIQUE,
+    address         INT          REFERENCES Address_(id),
+    postalService   CHAR   ( 15) REFERENCES PostalService(vat)
 );
 
 CREATE TABLE Vehicle (
-    licensePlate    varchar(6) PRIMARY KEY,     -- 6 chars, right?
-    -- postOffice
-    maxWeight       int,
-    type_           varchar(255),               -- type is a reserved keyword
+    plate       CHAR(15)    PRIMARY KEY                         ,
+    postOffice  INT         REFERENCES PostOffice(id)           ,
+    maxWeight   FLOAT       CHECK (maxWeight > 0)               ,
+    type        CHAR(15)    CHECK (type in ('motorbike', 'van'))
 );
 
 CREATE TABLE Person (
-    vat             int PRIMARY KEY,
-    name_           varchar(255),               -- Name is a reserved keyword
-    -- address
-    phoneNumber     int                         -- Any contraint here?
+    vat         CHAR   ( 15) PRIMARY KEY            ,
+    name        VARCHAR(255) NOT NULL               ,
+    address     INT          REFERENCES Address_(id),
+    phoneNumber CHAR   ( 31)                        
 );
 
 CREATE TABLE Client (
-    -- vat
+    vat         CHAR(15) PRIMARY KEY REFERENCES Person
 );
 
 CREATE TABLE Employee (
-    -- vat
-    -- postOffice
-    salary          int
+    vat         CHAR   (15)     PRIMARY KEY REFERENCES Person   ,
+    postOffice  INT             REFERENCES PostOffice(id)       ,
+    salary      DECIMAL(38, 2)  NOT NULL CHECK (salary >= 0)
 );
 
 CREATE TABLE Manager (
-    -- vat
+    vat         CHAR(15) PRIMARY KEY REFERENCES Employee
 );
 
 CREATE TABLE ShopKeeper (
-    -- vat
-    -- supervisor
+    vat         CHAR(15) PRIMARY KEY REFERENCES Employee,
+    supervisor  CHAR(15) REFERENCES Manager
 );
 
 CREATE TABLE Postman (
-    -- vat
-    -- supervisor
+    vat         CHAR(15) PRIMARY KEY REFERENCES Employee,
+    supervisor  CHAR(15) REFERENCES Manager
 );
 
 CREATE TABLE Delivery (
-    idDelivery      int PRIMARY KEY,
-    -- from
-    -- to
-    -- registeredBy
-    -- order
-    timeRegister    time,
-    weight_         int,        
+    id              INT         PRIMARY KEY                 ,
+    from            INT         NULL REFERENCES Address_(id),
+    to              INT         REFERENCES Address_(id)     ,
+    registeredBy    CHAR(15)    REFERENCES ShopKeeper(vat)  ,
+    order           INT         NULL REFERENCES Order_(id)  ,
+    timeRegister    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP   ,
+    weight          FLOAT       CHECK (weight > 0)          ,
+    service         VARCHAR(31) REFERENCES Service(name)    ,
+);
+
+CREATE TABLE Category (
+    name        VARCHAR(31) NOT NULL                    ,
+    maxWeight   FLOAT       UNIQUE CHECK(maxWeight > 0)
+);
+
+CREATE TABLE Service (
+    name    VARCHAR(31) NOT NULL
 );
