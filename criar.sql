@@ -96,10 +96,10 @@ CREATE TABLE Postman (
 
 CREATE TABLE Delivery (
     id              INT         PRIMARY KEY                 ,
-    from            INT         NULL REFERENCES Address_(id),
-    to              INT         REFERENCES Address_(id)     ,
+    from_           INT         NULL REFERENCES Address_(id),
+    to_             INT         REFERENCES Address_(id)     ,
     registeredBy    CHAR(15)    REFERENCES ShopKeeper(vat)  ,
-    order           INT         NULL REFERENCES Order_(id)  ,
+    order_          INT         NULL REFERENCES Order_(id)  ,
     timeRegister    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP   ,
     weight          FLOAT       CHECK (weight > 0)          ,
     service         VARCHAR(31) REFERENCES Service(name)    ,
