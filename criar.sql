@@ -18,11 +18,15 @@ DROP TABLE IF EXISTS Manager;
 DROP TABLE IF EXISTS ShopKeeper;
 DROP TABLE IF EXISTS Postman;
 DROP TABLE IF EXISTS Delivery;
+DROP TABLE IF EXISTS Category;
+DROP TABLE IF EXISTS Service;
 DROP TABLE IF EXISTS Order_;                    -- Order is a reserved keyword
 DROP TABLE IF EXISTS Bill;
 DROP TABLE IF EXISTS CatalogItem;
 DROP TABLE IF EXISTS BillItem;
 DROP TABLE IF EXISTS Price;
+
+PRAGMA foreign_keys=ON;
 
 CREATE TABLE ZipCode (
     country CHAR   ( 2)                         ,   -- ISO 3166-1 alpha-2 country code (PT for Portugal)
@@ -101,8 +105,8 @@ CREATE TABLE Delivery (
     registeredBy    CHAR(15)    REFERENCES ShopKeeper(vat)  ,
     order_          INT         NULL REFERENCES Order_(id)  ,
     timeRegister    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP   ,
-    weight_         FLOAT       CHECK (weight_ > 0)         ,
-    service_        VARCHAR(31) REFERENCES Service_(name_)  ,
+    weight          FLOAT       CHECK (weight > 0)          ,
+    service         VARCHAR(31) REFERENCES Service(name)
 );
 
 --CREATE FUNCTION getCategory(@weight AS FLOAT) RETURNS VARCHAR(31)
