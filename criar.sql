@@ -1,9 +1,7 @@
 
 
 -- TODO:
--- Finish tables
--- Figure out what to do with the postman->Postman type relations
--- Add Constrains
+-- Check Constrains / consistency / references / foreign keys
 -- Check table declaration "order"
 
 DROP TABLE IF EXISTS ZipCode;
@@ -133,6 +131,35 @@ CREATE TABLE Order_ (
 );
 
 CREATE TABLE Bill (
-    numBill         INT         PRIMARY KEY ,
+    numBill         INT                                         ,
+    seller          CHAR(15)    REFERENCES PostalService(vat)   ,
+    timeIssue       CHAR(10)                                    ,
+    price           INT                                         ,
+    consumer        CHAR(15)    REFERENCES Client(vat)          ,
+    issuer          CHAR(15)    REFERENCES ShopKeeper(vat)      ,
+    PRIMARY KEY     (numBill, seller)
+);
 
+CREATE TABLE CatalogItem (
+    idCatalogItem   INT         PRIMARY KEY ,
+    description_    VARCHAR(255)            ,
+    price           INT
+);
+
+CREATE TABLE BillItem (
+    numBill         INT     ,
+    seller          CHAR(15),
+    catalogItem     INT     ,
+    priceThen       INT     ,
+    amount          INT     ,
+    FOREIGN KEY (numBill, seller)   REFERENCES Bill(numBill, seller)  ,
+    FOREIGN KEY (catalogItem)       REFERENCES CatalogItem(idCatalogItem) ,
+    PRIMARY KEY     (numBill, seller, catalogItem)
+);
+
+CREATE TABLE Price (
+    category        VARCHAR(31)     REFERENCES Category     ,
+    service         VARCHAR(31)     REFERENCES Service(name),
+    price           INT                                 ,
+    PRIMARY KEY     (category, service)
 );
