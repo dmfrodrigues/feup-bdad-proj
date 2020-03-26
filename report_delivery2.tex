@@ -89,34 +89,36 @@ A postal service is made up of post offices, where each post office has its own 
 \section{Description}
 \subsection{General classes}
 \subsubsection{ZipCode}
-ZIP code, characterized by its number and country (pair of attributes that is also its primary key), as well as by the town and by the postman in charge of distributing mail to postal addresses under that ZIP code.
+Postal code (the designation of "ZIP code" is exclusive of the United States and some other countries, but since it conveys the same information with a shorter name we decided to adopt it), uniquely identified by the ISO 3166-1 alpha-2 country code (e.g., "PT") and code (e.g., "6120-111")and is characterized by the town (usually comes right after postal code; e.g., "PORTO") and by the postman in charge of distributing mail to postal addresses under that postal code (if there is one).
 \subsubsection{Address}
-An address is identified by its unique ID, by the street name, street number, door number, postal code, town and country.
+An address is uniquely identified by an ID, and is characterized by its postal code (country and code), street name, street number (primary door number) and door number (fraction, floor number, etc.).
 \subsubsection{PAddress}
-A postal address extends an address by also mentioning a person name (addresser or addressee), thus being a subclass of Address. Besides mentioning an origin and destination, a delivery must also mention who the addresser and the addressee are, thus requiring a PAddress instead of an Address.
+A postal address extends an address by also mentioning a person name (addresser or addressee), thus being a subclass of Address. Besides mentioning an origin and destination, a delivery must also mention who the addresser and the addressee are, thus requiring a PAddress instead of an Address.\par
+Since it only has an additional attribute relative to Address, this class was implemented by giving Address a personName attribute which can be NULL. If personName is NULL, it is a regular address, otherwise it is a PAddress.
 \subsection{PostalService}
-A postal service has a unique ID, a name and a VAT number, besides having physical locations designated hereinafter post offices, one of them being the headquarters. In this project, a PostalService serves the main purpose of storing the VAT and name of the entity that sells goods to clients, which avoids the need for thorough description of the workings of a PostalService that are not directly handled by a PostOffice.
+A postal service is a company that provides mail delivery services through its physical locations designated hereinafter post offices, one of them being the headquarters. It is uniquely identified by its VAT number, and is additionally characterized by the company name. \par
+In this project, a PostalService serves the main purpose of storing the VAT and name of the entity that sells goods to clients, which avoids the need for thorough description of the workings of a PostalService that are not directly handled by a PostOffice.
 \subsubsection{PostOffice}
 Post offices are places of contact between the postal service and the clients, where services are provided and purchases take place. A PostOffice is associated with a single PostalService.\par
-It is uniquely identified by an ID, and characterized also by its address, a list of employees, and by the assigned vehicles. For this reason, it is directly connected to the classes PostalService, Address, Employee and Vehicle.
+It is uniquely identified by an ID, and characterized also by its unique name, its address, a list of employees, and by the assigned vehicles. For this reason, it is directly connected to the classes PostalService, Address, Employee and Vehicle.
 \subsubsection{Vehicle}
 A vehicle is used to deliver mail and cannot be assigned to time-overlapping orders, given it can only fulfill an order at a time. It is uniquely identified by its license plate, and for each vehicle we know its capacity, that is, the maximum weight it can carry.
 \subsubsection{Motorbike}
-A motorbike is a vehicle which can be used to fulfill light orders, thus being a subclass of Vehicle. A light order can otherwise be fulfilled by foot.
+A motorbike is a vehicle which can be used to fulfill light orders, thus being a subclass of Vehicle.
 \subsubsection{Van}
 Like the motorbike, the van extends the class Vehicle, but unlike the motorbike, it can be used to deliver general orders.
 \subsection{Person}
-For every person we know the VAT number (also serving as a person ID), name, address, and phone number.
+For every person we know the VAT number (also serving as the unique person ID), name, address and phone number.
 \subsubsection{Client}
-A client is a person which may pay for a good or service via a Bill.
+A client is a person which may pay for a good or service via a Bill. It extends Person and does not have any additional attributes.
 \subsubsection{Employee}
-An employee is a person (thus a subclass of Person) that is employed by the company, which provides him/her with a salary. For every employee we know his base salary.
+An employee is a person (thus a subclass of Person) that is employed by the company, which provides him/her with a salary. For every employee we know his/her base salary.
 \subsubsection{Manager}
 A manager is an employee who is responsible for monitoring a set of sales employees and postmen.
 \subsubsection{ShopKeeper}
-A shopKeeper is a sales Employee (thus extending the class Employee) who is responsible for processing sales and registering deliveries that were paid for at the PostOffice or mail collected from post boxes.
+A shopKeeper is a sales Employee (thus extending the class Employee) who is responsible for processing sales and registering deliveries paid at the PostOffice and mail collected from postboxes.
 \subsubsection{Postman}
-A postman is an employee (therefore being a subclass of Employee) responsible for home-to-home mail distribution. A postman is assigned a group of ZIP codes.
+A postman is an employee (therefore being a subclass of Employee) responsible for home-to-home mail distribution. A postman is assigned a group of postal codes.
 \subsection{Delivery}
 A delivery is requested by the client and registered by a shopKeeper. \par
 Identifiable by its ID, each delivery keeps track of the time of registration, weight, and the postal addresses of the origin and destination (thus connecting this class to PAddress). A delivery’s price is determined not only by the type of service chosen (Economy, Express or Registered) but also by its category; it is classified as a Document if it weighs under 0.100kg, as Parcel if under 2.000kg or Overweight otherwise.\par
@@ -124,7 +126,7 @@ Depending on the delivery, its payment can be done either by the purchase of a s
 \subsubsection{Order}
 An order corresponds to a request of transporting a deliverable to its destination.\par
 It is characterized by its identification number as well as by the postman assigned to its delivery, by the vehicle used for that end and by the scheduled time of departure from, and arrival to, the post office by the postman.\par
-It can either be a General Order or a Light Order depending on the category (and therefore on the weight) of the deliverables: light orders can only be used for deliveries which have Documents as its category.
+It can either be a General Order or a Light Order depending on the category (and therefore on the weight) of the deliverables: light orders can only be used for deliveries which have Documents as its category. A light order can be fulfilled by foot.
 \subsubsection{Stamp}
 A stamp is an alternative to paying for a Document using a bill. A stamped document can be deposited in a postbox. Given stamps are specialized according to the service that will be used in transporting the Document, Stamp is associated to the class Service.
 \subsection{Bill}
