@@ -38,8 +38,8 @@ CREATE TABLE ZipCode (
 
 CREATE TABLE Address (
     id              INT          PRIMARY KEY,
-    zipCode         CHAR   ( 12)            ,   -- Postal code
-    country         CHAR   (  2)            ,   -- Country code
+    zipCode         CHAR   ( 12) NOT NULL   ,   -- Postal code
+    country         CHAR   (  2) NOT NULL   ,   -- Country code
     streetName      VARCHAR(255) NOT NULL   ,   -- Street name
     streetNumber    VARCHAR( 15) NOT NULL   ,   -- Street number (main door number, may not have number: s/n)
     doorNumber      VARCHAR( 15)            ,   -- Door number if in an appartment block
@@ -56,7 +56,7 @@ CREATE TABLE PostalService (
 CREATE TABLE PostOffice (
     id              INT          PRIMARY KEY    ,
     name            VARCHAR(255) NOT NULL UNIQUE,
-    address         INT          REFERENCES Address(id),
+    address         INT          NOT NULL REFERENCES Address(id),
     postalService   CHAR   ( 15) NOT NULL REFERENCES PostalService(vat)
 );
 
@@ -64,13 +64,13 @@ CREATE TABLE Vehicle (
     plate           CHAR(15)    PRIMARY KEY                         ,
     postOffice      INT         REFERENCES PostOffice(id)           ,
     maxWeight       FLOAT       CHECK (maxWeight > 0)               ,
-    type           CHAR(15)    CHECK (type in ('motorbike', 'van'))
+    type           CHAR(15)     CHECK (type in ('motorbike', 'van'))
 );
 
 CREATE TABLE Person (
     vat             CHAR   ( 15) PRIMARY KEY            ,
     name            VARCHAR(255) NOT NULL               ,
-    address         INT          REFERENCES Address(id),
+    address         INT          NOT NULL REFERENCES Address(id),
     phoneNumber     CHAR   ( 31)                        
 );
 
@@ -90,32 +90,39 @@ CREATE TABLE Manager (
 
 CREATE TABLE ShopKeeper (
     vat             CHAR(15) PRIMARY KEY REFERENCES Employee,
-    supervisor      CHAR(15) REFERENCES Manager
+    supervisor      CHAR(15) NOT NULL REFERENCES Manager
 );
 
 CREATE TABLE Postman (
     vat             CHAR(15) PRIMARY KEY REFERENCES Employee,
-    supervisor      CHAR(15) REFERENCES Manager
+    supervisor      CHAR(15) NOT NULL REFERENCES Manager
 );
 
 CREATE TABLE Delivery (
     id              INT         PRIMARY KEY                 ,
     from_           INT         NULL REFERENCES Address(id),
-    to_             INT         REFERENCES Address(id)     ,
-    registeredBy    CHAR(15)    REFERENCES ShopKeeper(vat)  ,
+    to_             INT         NOT NULL REFERENCES Address(id)     ,
+    registeredBy    CHAR(15)    NOT NULL REFERENCES ShopKeeper(vat)  ,
     order_          INT         NULL REFERENCES Order_(id)  ,
-    timeRegister    TIMESTAMP   DEFAULT CURRENT_TIMESTAMP   ,
+    timeRegister    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP   ,
     weight          FLOAT       CHECK (weight > 0)          ,
-    service         VARCHAR(31) REFERENCES Service(name)
+    service         VARCHAR(31) NOT NULL REFERENCES Service(name)
 );
 
 CREATE TABLE Category (
-    name            VARCHAR(31) NOT NULL                    ,
+    name            VARCHAR(31) PRIMARY KEY                 ,
     maxWeight       FLOAT       UNIQUE CHECK(maxWeight > 0)
 );
 
 CREATE TABLE Service (
-    name            VARCHAR(31) NOT NULL
+    name            VARCHAR(31) PRIMARY KEY
+);
+
+CREATE TABLE Price (
+    category        VARCHAR(31)     NOT NULL REFERENCES Category(name)   ,
+    service         VARCHAR(31)     NOT NULL REFERENCES Service(name)    ,
+    price           DECIMAL(12, 2)                              ,
+    PRIMARY KEY     (category, service)
 );
 
 CREATE TABLE Order_ (
@@ -123,40 +130,33 @@ CREATE TABLE Order_ (
     timeBegin   CHAR(19)                ,               -- "DD-MM-YYYY HH:MM:SS"
     timeEnd     CHAR(19)                ,
     type        CHAR   (12) CHECK (type in ('generalOrder', 'lightOrder')) ,
-    vehicle     VARCHAR(31) REFERENCES Vehicle(plate)                       ,
-    postman     CHAR   (15) REFERENCES Postman(vat)
+    vehicle     VARCHAR(31) NULL REFERENCES Vehicle(plate)                       ,
+    postman     CHAR   (15) NOT NULL REFERENCES Postman(vat),
+    CHECK (timeBegin < timeEnd)
 );
 
 CREATE TABLE Bill (
-    numBill         INT                                         ,
-    seller          CHAR(15)    REFERENCES PostalService(vat)   ,
-    timeIssue       CHAR(19)                                    ,
-    price           INT                                         ,
-    consumer        CHAR(15)    REFERENCES Client(vat)          ,
-    issuer          CHAR(15)    REFERENCES ShopKeeper(vat)      ,
+    numBill         INT                                                  ,
+    seller          CHAR(15)    REFERENCES PostalService(vat)            ,
+    timeIssue       CHAR(19)    NOT NULL                                 ,
+    price           DECIMAL(12, 2) NOT NULL                              ,
+    consumer        CHAR(15)    NOT NULL REFERENCES Client(vat)          ,
+    issuer          CHAR(15)    NOT NULL REFERENCES ShopKeeper(vat)      ,
     PRIMARY KEY     (numBill, seller)
 );
 
 CREATE TABLE CatalogItem (
-    idCatalogItem   INT         PRIMARY KEY ,
+    id              INT         PRIMARY KEY ,
     description     VARCHAR(255)            ,
-    price           INT
+    price           DECIMAL(12, 2) NOT NULL
 );
 
 CREATE TABLE BillItem (
-    numBill         INT     ,
-    seller          CHAR(15),
-    catalogItem     INT     ,
-    priceThen       INT     ,
-    amount          INT     ,
-    FOREIGN KEY (numBill, seller)   REFERENCES Bill(numBill, seller)  ,
-    FOREIGN KEY (catalogItem)       REFERENCES CatalogItem(idCatalogItem) ,
-    PRIMARY KEY (numBill, seller, catalogItem)
-);
-
-CREATE TABLE Price (
-    category        VARCHAR(31)     REFERENCES Category     ,
-    service         VARCHAR(31)     REFERENCES Service(name),
-    price           INT                                 ,
-    PRIMARY KEY     (category, service)
+    numBill         INT             ,
+    seller          CHAR(15)        ,
+    catalogItem     INT             NOT NULL REFERENCES CatalogItem(idCatalogItem),
+    priceThen       DECIMAL(12, 2)  ,
+    amount          INT             CHECK(amount > 0),
+    PRIMARY KEY (numBill, seller, catalogItem),
+    FOREIGN KEY (numBill, seller)   REFERENCES Bill(numBill, seller)
 );
