@@ -42,8 +42,8 @@ CREATE TABLE Address (
     country         CHAR   (  2) NOT NULL   ,   -- Country code
     streetName      VARCHAR(255) NOT NULL   ,   -- Street name
     streetNumber    VARCHAR( 15) NOT NULL   ,   -- Street number (main door number, may not have number: s/n)
-    doorNumber      VARCHAR( 15)            ,   -- Door number if in an appartment block
-    personName      VARCHAR(255)            ,   -- Addresser or addressee if applicable
+    doorNumber      VARCHAR( 15) NULL       ,   -- Door number if in an appartment block
+    personName      VARCHAR(255) NULL       ,   -- Addresser or addressee if applicable
     FOREIGN KEY (zipCode, country) REFERENCES ZipCode(code, country)
 );
 
