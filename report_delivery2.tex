@@ -260,20 +260,20 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \chapter{Restrictions}
 \subsubsection{ZipCode}
 \begin{itemize}
-    \item CONSTRAINT PK\_ZipCode PRIMARY KEY (country, number)
-    \item town NOT NULL
-    \item CONSTRAINT FK\_ZipCode\_Postman FOREIGN KEY (postman) REFERENCES Postman(vat)
+    \item Each ZipCode is uniquely identifiable by the country and number. \\ CONSTRAINT PK\_ZipCode PRIMARY KEY (country, number)
+    \item Each ZipCode must have an associated town. \\ town NOT NULL
+    \item ??? \\ CONSTRAINT FK\_ZipCode\_Postman FOREIGN KEY (postman) REFERENCES Postman(vat)
 \end{itemize}
 \subsubsection{Address}
 \begin{itemize}
-    \item CONSTRAINT PK\_Address PRIMARY KEY (idAddress)
-    \item CONSTRAINT FK\_Address\_ZipCode FOREIGN KEY (zipNumber, country) REFERENCES ZipCode(number, country)
-    \item streetName NOT NULL
-    \item streetNumber NOT NULL
+    \item Each address is uniquely identified by its id. \\ CONSTRAINT PK\_Address PRIMARY KEY (idAddress)
+    \item ?? \\ CONSTRAINT FK\_Address\_ZipCode FOREIGN KEY (zipNumber, country) REFERENCES ZipCode(number, country)
+    \item An address must have a street name associated with it. \\ streetName NOT NULL
+    \item An address must have a street number associated with it. \\ streetNumber NOT NULL
 \end{itemize}
 \subsubsection{PostalService}
 \begin{itemize}
-    \item CONTRAINT PK\_PostalService PRIMARY KEY (vat)
+    \item CONSTRAINT PK\_PostalService PRIMARY KEY (vat)
     \item name NOT NULL UNIQUE
     \item CONSTRAINT FK\_PostalService\_PostOffice FOREIGN KEY (headquarters) REFERENCES PostOffice(idPostOffice)
 \end{itemize}
@@ -288,7 +288,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \begin{itemize}
     \item PRIMARY KEY licensePlate
     \item FOREIGN KEY $\{\text{postOffice}\}$ REFERENCES PostOffice
-    \item CHECK (maxWeight > 0)
+    \item CHECK (maxWeight $>$ 0)
     \item CHECK (type in ('motorbike', 'van'))
 \end{itemize}
 \subsubsection{Person}
