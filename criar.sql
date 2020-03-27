@@ -1,6 +1,6 @@
 -- TODO:
 -- Check Constrains / consistency / references / foreign keys
--- Check table declaration "order"
+-- Check order of tables' declaration
 
 -- SQLite keyworks: https://www.sqlite.org/lang_keywords.html
 
