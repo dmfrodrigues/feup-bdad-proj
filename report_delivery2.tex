@@ -260,51 +260,51 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \chapter{Restrictions}
 \subsubsection{ZipCode}
 \begin{itemize}
-    \item Each ZipCode is uniquely identifiable by the country and number. \\ CONSTRAINT PK\_ZipCode PRIMARY KEY (country, number)
+    \item Each ZipCode is identifiable by the country and number. \\ CONSTRAINT PK\_ZipCode PRIMARY KEY (country, number)
     \item Each ZipCode must have an associated town. \\ town NOT NULL
     \item ??? \\ CONSTRAINT FK\_ZipCode\_Postman FOREIGN KEY (postman) REFERENCES Postman(vat)
 \end{itemize}
 \subsubsection{Address}
 \begin{itemize}
-    \item Each address is uniquely identified by its id. \\ CONSTRAINT PK\_Address PRIMARY KEY (idAddress)
+    \item Each address is identified by its id. \\ CONSTRAINT PK\_Address PRIMARY KEY (idAddress)
     \item ?? \\ CONSTRAINT FK\_Address\_ZipCode FOREIGN KEY (zipNumber, country) REFERENCES ZipCode(number, country)
     \item An address must have a street name associated with it. \\ streetName NOT NULL
     \item An address must have a street number associated with it. \\ streetNumber NOT NULL
 \end{itemize}
 \subsubsection{PostalService}
 \begin{itemize}
-    \item CONSTRAINT PK\_PostalService PRIMARY KEY (vat)
-    \item name NOT NULL UNIQUE
-    \item CONSTRAINT FK\_PostalService\_PostOffice FOREIGN KEY (headquarters) REFERENCES PostOffice(idPostOffice)
+    \item A PostalService is recognized by its vat number. \\ CONSTRAINT PK\_PostalService PRIMARY KEY (vat)
+    \item Each PostalService must have a name and there cannot be two PostalServices with the same name. \\ name NOT NULL UNIQUE
+    \item ?? \\ CONSTRAINT FK\_PostalService\_PostOffice FOREIGN KEY (headquarters) REFERENCES PostOffice(idPostOffice)
 \end{itemize}
 \subsubsection{PostOffice}
 \begin{itemize}
-    \item CONSTRAINT PK\_PostOffice PRIMARY KEY (idPostOffice)
-    \item name NOT NULL UNIQUE
-    \item CONSTRAINT FK\_PostOffice\_Address FOREIGN KEY (address) REFERENCES Address(idAddress)
-    \item FOREIGN KEY $\{\text{postalService}\}$ REFERENCES PostalService
+    \item A PostOffice is identifiable by its id. \\ CONSTRAINT PK\_PostOffice PRIMARY KEY (idPostOffice)
+    \item PostOffice must have a name and there cannot be two PostOffice with the same name. \\ name NOT NULL UNIQUE
+    \item ?? \\ CONSTRAINT FK\_PostOffice\_Address FOREIGN KEY (address) REFERENCES Address(idAddress)
+    \item ?? \\ FOREIGN KEY $\{\text{postalService}\}$ REFERENCES PostalService
 \end{itemize}
 \subsubsection{Vehicle}
 \begin{itemize}
-    \item PRIMARY KEY licensePlate
-    \item FOREIGN KEY $\{\text{postOffice}\}$ REFERENCES PostOffice
-    \item CHECK (maxWeight $>$ 0)
-    \item CHECK (type in ('motorbike', 'van'))
+    \item A vehicle is recognized by its licensePlate. \\ PRIMARY KEY licensePlate
+    \item ?? \\ FOREIGN KEY $\{\text{postOffice}\}$ REFERENCES PostOffice
+    \item The maximum weight a vehicle can transport must be a positive value. \\ CHECK (maxWeight $>$ 0)
+    \item There are only 2 types of vehicles: motorbike and van. \\ CHECK (type in ('motorbike', 'van'))
 \end{itemize}
 \subsubsection{Person}
 \begin{itemize}
-    \item PRIMARY KEY vat
-    \item name NOT NULL
-    \item FOREIGN KEY $\{\text{address}\}$ REFERENCES Address
-    \item phoneNumber NOT NULL
+    \item A Person is identifiable by its vat number. \\ PRIMARY KEY vat
+    \item A Person must have a name. \\ name NOT NULL
+    \item ?? \\ FOREIGN KEY $\{\text{address}\}$ REFERENCES Address
+    \item A Person must have a phone number associated with his/her registry. \\ phoneNumber NOT NULL
 \end{itemize}
 \subsubsection{Client}
 \begin{itemize}
-    \item PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+    \item As in the case of Person, a Client is identified by its vat number. \\ PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
 \end{itemize}
 \subsubsection{Employee}
 \begin{itemize}
-    \item PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+    \item As in the case of Person, an Employee is identified by its vat number. \\ PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
 \end{itemize}
 \subsubsection{Manager}
 \subsubsection{ShopKeeper}
