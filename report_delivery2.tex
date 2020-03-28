@@ -97,7 +97,7 @@ An address is uniquely identified by an ID, and is characterized by its postal c
 A postal address extends an address by also mentioning a person name (addresser or addressee), thus being a subclass of Address. Besides mentioning an origin and destination, a delivery must also mention who the addresser and the addressee are, thus requiring a PAddress instead of an Address.\par
 Since it only has an additional attribute relative to Address, this class was implemented by giving Address a personName attribute which can be NULL. If personName is NULL, it is a regular address, otherwise it is a PAddress.
 \subsection{PostalService}
-A postal service is a company that provides mail delivery services through its physical locations designated hereinafter post offices, one of them being the headquarters (the implementation allows a NULL headquarters, since a PostOffice refers to a PostalService but a PostalService also refers to a specific PostOffice; since one of them has to be created first, we decided not to enforce a headquarters to be NOT NULL). It is uniquely identified by its VAT number, and is additionally characterized by the company name. \par
+A postal service is a company that provides mail delivery services through its physical locations designated hereinafter post offices, one of them being the headquarters (implementation allows a NULL headquarters, since a PostOffice refers to a PostalService but a PostalService also refers to a specific PostOffice; since one of them has to be created first, we decided not to enforce a headquarters to be NOT NULL). It is uniquely identified by its VAT number, and is additionally characterized by the company name. \par
 In this project, a PostalService serves the main purpose of storing the VAT and name of the entity that sells goods to clients, which avoids the need for thorough description of the workings of a PostalService that are not directly handled by a PostOffice.
 \subsubsection{PostOffice}
 Post offices are places of contact between the postal service and the clients, where services are provided and purchases take place. A PostOffice is associated with a single PostalService.\par
@@ -107,7 +107,7 @@ A vehicle is used to deliver mail and cannot be assigned to time-overlapping ord
 \subsubsection{Motorbike}
 A motorbike is a vehicle which can be used to fulfill light orders, thus being a subclass of Vehicle.
 \subsubsection{Van}
-Like the motorbike, the van extends the class Vehicle, but unlike the motorbike, it can be used to deliver general orders.
+Like the motorbike, the van extends class Vehicle, but unlike the motorbike, it can be used to deliver general orders.
 \subsection{Person}
 For every person we know the VAT number (also serving as the unique person ID), name, address and phone number.
 \subsubsection{Client}
@@ -133,7 +133,7 @@ A stamp is an alternative to paying for a Document using a bill. A stamped docum
 \subsection{Bill}
 A bill can be used to buy products at a PostOffice, as well as to pay for any kind of deliverable. A bill uniquely identified by its bill number and seller VAT (which is the company the client is paying for a delivery), and is described by the price (which is the sum of prices of the items of the delivery plus any other item bought at the PostOffice), issue time, issuing shopKeeper and the client that paid for it.
 \subsubsection{CatalogItem}
-A catalog item has a corresponding ID (similar to a barcode), description and current price. The list of all catalog items make up the catalog of products the PostalService has for sale.
+A catalog item has a corresponding ID (similar to a bar-code), description and current price. The list of all catalog items make up the catalog of products the PostalService has for sale.
 \subsubsection{BillItem}
 A bill item represents a particular line in a Bill, meaning it identifies the kind of CatalogItem being bought, the price per unit at the moment it was bought, and the amount, for which a client paid a given sum. It is identifiable by the bill it belongs to (numBill and seller), plus the type of CatalogItem it refers to (since there cannot be two lines in the same bill referencing the same catalog product, and those two lines could rather be represented by a single line with the sum of the amounts).
 \section{UML}
@@ -230,7 +230,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 This relation is in the 1NF, given the domain of each attribute contains only atomic values, and that the value of each attribute contains only a single value from that domain (in short, no attribute is a list/set, but rather an atomic value).\par
 It is also in the 2NF, given $\{\text{idDelivery}\}$ is a candidate key (we thus ignore the first dependency), added to the fact that, although category is non-prime, $\{\text{weight}\}$ is not a proper subset of a candidate key. \par
 It is not however in the 3NF, given the second functional dependency is a 3NF-violation since $\{\text{weight}\}$ is not a superkey nor is category a prime attribute. Since BCNF is a subset of 3NF, then the second functional dependency is also a BCNF-violation.\par
-This violation takes place because this attribute's value is directy calculated from weight, which is but a consequence of the method presented in this course for transforming the UML into a list of relations, which suggests translating derivable UML attributes into regular relational attributes associated to their respective functional dependencies. \par
+This violation takes place because this attribute's value is directly calculated from weight, which is but a consequence of the method presented in this course for transforming the UML into a list of relations, which suggests translating derivable UML attributes into regular relational attributes associated to their respective functional dependencies. \par
 Had we considered this attribute to be calculated on-the-fly as a temporary variable, this violation would not take place. This is in fact the approach we will take to compress this particular table, thus meaning the actual database will not include the aforementioned violation.
 \subsubsection{Order}
 \begin{alignat*}{2}
