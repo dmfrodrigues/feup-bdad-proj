@@ -261,60 +261,126 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \chapter{Restrictions}
 \subsubsection{ZipCode}
 \begin{itemize}
-    \item Each ZipCode is identifiable by the country and number. \\ CONSTRAINT PK\_ZipCode PRIMARY KEY (country, number)
-    \item Each ZipCode must have an associated town. \\ town NOT NULL
-    \item ??? \\ CONSTRAINT FK\_ZipCode\_Postman FOREIGN KEY (postman) REFERENCES Postman(vat)
+    \item Each ZipCode must have an associated town. \\ town VARCHAR(63) NOT NULL
+    \item Each ZipCode may refer to a postman responsible for delivering mail in that area. \\ postman CHAR(15) REFERENCES Postman(vat)
+    \item Each ZipCode is identifiable by the country and number. \\ PRIMARY KEY (country, code)
 \end{itemize}
 \subsubsection{Address}
 \begin{itemize}
-    \item Each address is identified by its id. \\ CONSTRAINT PK\_Address PRIMARY KEY (idAddress)
-    \item ?? \\ CONSTRAINT FK\_Address\_ZipCode FOREIGN KEY (zipNumber, country) REFERENCES ZipCode(number, country)
+    \item Each address is identified by its id. \\ id INT PRIMARY KEY
+    \item An address must have a zipCode associated with it. \\ zipCode CHAR(12) NOT NULL
+    \item An address must have a country associated with it. \\ country CHAR(2) NOT NULL
     \item An address must have a street name associated with it. \\ streetName NOT NULL
     \item An address must have a street number associated with it. \\ streetNumber NOT NULL
+    \item An address's zipCode and country reference its ZipCode. \\ FOREIGN KEY (zipCode, country) REFERENCES ZipCode(code, country)
 \end{itemize}
 \subsubsection{PostalService}
 \begin{itemize}
-    \item A PostalService is recognized by its vat number. \\ CONSTRAINT PK\_PostalService PRIMARY KEY (vat)
-    \item Each PostalService must have a name and there cannot be two PostalServices with the same name. \\ name NOT NULL UNIQUE
-    \item ?? \\ CONSTRAINT FK\_PostalService\_PostOffice FOREIGN KEY (headquarters) REFERENCES PostOffice(idPostOffice)
+    \item A PostalService is recognized by its VAT number. \\ vat CHAR(15) PRIMARY KEY
+    \item Each PostalService must have a name. \\ name VARCHAR(255) NOT NULL
+    \item Each PostalService has a headquarters, a special PostOffice, referenced by its id. \\ hq INT REFERENCES PostOffice(id)
 \end{itemize}
 \subsubsection{PostOffice}
 \begin{itemize}
-    \item A PostOffice is identifiable by its id. \\ CONSTRAINT PK\_PostOffice PRIMARY KEY (idPostOffice)
-    \item PostOffice must have a name and there cannot be two PostOffice with the same name. \\ name NOT NULL UNIQUE
-    \item ?? \\ CONSTRAINT FK\_PostOffice\_Address FOREIGN KEY (address) REFERENCES Address(idAddress)
-    \item ?? \\ FOREIGN KEY $\{\text{postalService}\}$ REFERENCES PostalService
+    \item A PostOffice is identifiable by its id. \\ id INT PRIMARY KEY
+    \item PostOffice must have a name and there cannot be two PostOffices with the same name. \\ name VARCHAR(255) NOT NULL UNIQUE
+    \item A PostOffice must have a non-null address. \\ address INT NOT NULL REFERENCES Address(id)
+    \item A PostOffice belongs to a certain PostalService. \\ postalService CHAR(15) NOT NULL REFERENCES PostalService(vat)
 \end{itemize}
 \subsubsection{Vehicle}
 \begin{itemize}
-    \item A vehicle is recognized by its licensePlate. \\ PRIMARY KEY licensePlate
-    \item ?? \\ FOREIGN KEY $\{\text{postOffice}\}$ REFERENCES PostOffice
-    \item The maximum weight a vehicle can transport must be a positive value. \\ CHECK (maxWeight $>$ 0)
-    \item There are only 2 types of vehicles: motorbike and van. \\ CHECK (type in ('motorbike', 'van'))
+    \item A vehicle is recognized by its licensePlate. \\ plate CHAR(15) PRIMARY KEY
+    \item A vehicle belongs to a specific PostOffice. \\ postOffice INT NOT NULL REFERENCES PostOffice(id)
+    \item The maximum weight a vehicle can transport must be a positive value. \\ maxWeight FLOAT CHECK (maxWeight > 0)
+    \item There are only 2 types of vehicles: motorbike and van. \\ type CHAR(15) CHECK (type in ('motorbike', 'van'))
 \end{itemize}
 \subsubsection{Person}
 \begin{itemize}
-    \item A Person is identifiable by its vat number. \\ PRIMARY KEY vat
-    \item A Person must have a name. \\ name NOT NULL
-    \item ?? \\ FOREIGN KEY $\{\text{address}\}$ REFERENCES Address
-    \item A Person must have a phone number associated with his/her registry. \\ phoneNumber NOT NULL
+    \item A Person is identifiable by its VAT number. \\ vat CHAR(15) PRIMARY KEY
+    \item A Person must have a name. \\ name VARCHAR(255) NOT NULL
+    \item A Person must have an address. \\ address INT NOT NULL REFERENCES Address(id)
 \end{itemize}
 \subsubsection{Client}
 \begin{itemize}
-    \item As in the case of Person, a Client is identified by its vat number. \\ PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+    \item As in the case of Person, a Client is identified by its VAT number. \\ vat CHAR(15) PRIMARY KEY REFERENCES Person
 \end{itemize}
 \subsubsection{Employee}
 \begin{itemize}
-    \item As in the case of Person, an Employee is identified by its vat number. \\ PRIMARY KEY FOREIGN KEY $\{\text{vat}\}$ REFERENCES Person
+    \item As in the case of Person, an Employee is identified by its VAT number. \\ vat CHAR(15) PRIMARY KEY REFERENCES Person
+    \item An Employee is assigned to a PostOffice. \\ postOffice INT NOT NULL REFERENCES PostOffice(id)
+    \item An Employee gets paid a monthly salary, obviously greater than zero. \\ salary DECIMAL(38, 2) NOT NULL CHECK (salary >= 0)
 \end{itemize}
 \subsubsection{Manager}
+\begin{itemize}
+    \item As in the case of Employee, a Manager is identified by its VAT number. \\ vat CHAR(15) PRIMARY KEY REFERENCES Employee
+\end{itemize}
 \subsubsection{ShopKeeper}
+\begin{itemize}
+    \item As in the case of Employee, a ShopKeeper is identified by its VAT number. \\ vat CHAR(15) PRIMARY KEY REFERENCES Employee
+    \item A ShopKeeper is supervised by a Manager. \\ supervisor CHAR(15) NOT NULL REFERENCES Manager
+\end{itemize}
 \subsubsection{Postman}
+\begin{itemize}
+    \item As in the case of Employee, a Postman is identified by its VAT number. \\ vat CHAR(15) PRIMARY KEY REFERENCES Employee
+    \item A Postman is supervised by a Manager. \\ supervisor CHAR(15) NOT NULL REFERENCES Manager
+\end{itemize}
 \subsubsection{Delivery}
-\subsubsection{Order}
-\subsubsection{Bill}
-\subsubsection{CatalogItem}
-\subsubsection{BillItem}
+\begin{itemize}
+    \item A Delivery is identified by its unique id. \\id INT PRIMARY KEY
+    \item A Delivery can have an addresser. \\ from\_ INT NULL REFERENCES Address(id)
+    \item A Delivery must have an addressee. \\ to\_ INT NOT NULL REFERENCES Address(id)
+    \item For each delivery, we know who registered it by his/her VAT. \\ registeredBy CHAR(15) NOT NULL REFERENCES ShopKeeper(vat)
+    \item As a Delivery is being prepared for delivery, it can be assigned to an order. \\ order\_ INT NULL REFERENCES Order\_(id)
+    \item On insertion, each Delivery is assigned by default the current time for its time of register. \\ timeRegister TIMESTAMP NOT NULL DEFAULT CURRENT\_TIMESTAMP
+    \item For each Delivery we know its weight. \\ weight FLOAT CHECK (weight > 0)
+    \item A Delivery must have an associated service. \\ service VARCHAR(31) NOT NULL REFERENCES Service(name)
+\end{itemize}
+\subsubsection{Category}
+\begin{itemize}
+    \item A Category is uniquely identified by its name. \\ name VARCHAR(31) PRIMARY KEY
+    \item Each Category has a unique maximum weight, which is obviously positive. \\ maxWeight FLOAT UNIQUE CHECK(maxWeight > 0)
+\end{itemize}
+\subsubsection{Service}
+\begin{itemize}
+    \item A Service is uniquely identified by its name. \\ name VARCHAR(31) PRIMARY KEY
+\end{itemize}
 \subsubsection{Price}
+\begin{itemize}
+    \item A Price must reference a Category. \\ category VARCHAR(31) NOT NULL REFERENCES Category(name)
+    \item A Price must reference a Service. \\ service VARCHAR(31) NOT NULL REFERENCES Service(name)
+    \item A Price must have a price associated to the corresponding category and service. \\ price DECIMAL(12, 2)
+    \item A Price is uniquely identified by its category and service. \\ PRIMARY KEY (category, service)
+\end{itemize}
+\subsubsection{Order}
+\begin{itemize}
+    \item An Order is uniquely identified by its id. \\ id INT PRIMARY KEY
+    \item An Order can only belong to one of two classes 'generalOrder' or 'lightOrder'. \\ type CHAR(12) CHECK (type in ('generalOrder', 'lightOrder'))
+    \item An Order may be assigned a vehicle, otherwise the postman will be delivering on foot. \\ vehicle VARCHAR(31) NULL REFERENCES Vehicle(plate)
+    \item An Order must be assigned to a postman. \\ postman CHAR(15) NOT NULL REFERENCES Postman(vat)
+    \item An Order can only finish after it started. \\ CHECK (timeBegin < timeEnd)
+\end{itemize}
+\subsubsection{Bill}
+\begin{itemize}
+    \item A Bill is issued by a PostalService as a seller. \\ seller CHAR(15) REFERENCES PostalService(vat)
+    \item A Bill must be assigned an issue time, and it defaults to the current time on insertion. \\ timeIssue TIMESTAMP NOT NULL DEFAULT CURRENT\_TIMESTAMP
+    \item A Bill must have a price, which was charged to the customer on issue. \\ price DECIMAL(12, 2) NOT NULL
+    \item A Bill references the client that is paying for it. \\ consumer CHAR(15) NOT NULL REFERENCES Client(vat)
+    \item A Bill references the ShopKeeper that processed the sale. \\ issuer CHAR(15) NOT NULL REFERENCES ShopKeeper(vat)
+    \item A Bill is uniquely identified by its seller and its bill number. \\ PRIMARY KEY (numBill, seller)
+\end{itemize}
+\subsubsection{CatalogItem}
+\begin{itemize}
+    \item A CatalogItem is uniquely identified by an id. \\ id INT PRIMARY KEY
+    \item A CatalogItem must have a price. \\ price DECIMAL(12, 2) NOT NULL
+\end{itemize}
+\subsubsection{BillItem}
+\begin{itemize}
+    \item A BillItem must refer to a valid numBill. \\ numBill INT NOT NULL
+    \item A BillItem must refer to a valid seller. \\ seller CHAR(15) NOT NULL
+    \item A BillItem must refer to a CatalogItem \\ catalogItem INT NOT NULL REFERENCES CatalogItem(idCatalogItem)
+    \item A BillItem registers the amount of a CatalogItem bought, which must obviously be more than zero. \\ amount INT CHECK(amount $>$ 0)
+    \item A BillItem is uniquely identified by its Bill's identifiers (numBill and seller) and the CatalogItem it refers to. \\ PRIMARY KEY (numBill, seller, catalogItem)
+    \item A BillItem refers to its Bill through (numBill, seller). \\ FOREIGN KEY (numBill, seller)   REFERENCES Bill(numBill, seller)
+\end{itemize}
 
 \end{document}

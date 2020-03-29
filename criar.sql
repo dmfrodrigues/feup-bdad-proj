@@ -62,7 +62,7 @@ CREATE TABLE PostOffice (
 
 CREATE TABLE Vehicle (
     plate           CHAR(15)    PRIMARY KEY                         ,
-    postOffice      INT         REFERENCES PostOffice(id)           ,
+    postOffice      INT         NOT NULL REFERENCES PostOffice(id)  ,
     maxWeight       FLOAT       CHECK (maxWeight > 0)               ,
     type           CHAR(15)     CHECK (type in ('motorbike', 'van'))
 );
@@ -127,8 +127,8 @@ CREATE TABLE Price (
 
 CREATE TABLE Order_ (
     id          INT         PRIMARY KEY                                     ,
-    timeBegin   CHAR(19)                ,               -- "DD-MM-YYYY HH:MM:SS"
-    timeEnd     CHAR(19)                ,
+    timeBegin   DATETIME                ,               -- "DD-MM-YYYY HH:MM:SS"
+    timeEnd     DATETIME                ,
     type        CHAR   (12) CHECK (type in ('generalOrder', 'lightOrder')) ,
     vehicle     VARCHAR(31) NULL REFERENCES Vehicle(plate)                       ,
     postman     CHAR   (15) NOT NULL REFERENCES Postman(vat),
@@ -138,7 +138,7 @@ CREATE TABLE Order_ (
 CREATE TABLE Bill (
     numBill         INT                                                  ,
     seller          CHAR(15)    REFERENCES PostalService(vat)            ,
-    timeIssue       CHAR(19)    NOT NULL                                 ,
+    timeIssue       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP       ,
     price           DECIMAL(12, 2) NOT NULL                              ,
     consumer        CHAR(15)    NOT NULL REFERENCES Client(vat)          ,
     issuer          CHAR(15)    NOT NULL REFERENCES ShopKeeper(vat)      ,
@@ -152,8 +152,8 @@ CREATE TABLE CatalogItem (
 );
 
 CREATE TABLE BillItem (
-    numBill         INT             ,
-    seller          CHAR(15)        ,
+    numBill         INT             NOT NULL,
+    seller          CHAR(15)        NOT NULL,
     catalogItem     INT             NOT NULL REFERENCES CatalogItem(idCatalogItem),
     priceThen       DECIMAL(12, 2)  ,
     amount          INT             CHECK(amount > 0),
