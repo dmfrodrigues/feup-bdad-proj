@@ -291,7 +291,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \begin{itemize}
     \item A vehicle is recognized by its licensePlate. \\ plate CHAR(15) PRIMARY KEY
     \item A vehicle belongs to a specific PostOffice. \\ postOffice INT NOT NULL REFERENCES PostOffice(id)
-    \item The maximum weight a vehicle can transport must be a positive value. \\ maxWeight FLOAT CHECK (maxWeight > 0)
+    \item The maximum weight a vehicle can transport must be a positive value. \\ maxWeight FLOAT CHECK (maxWeight $>$ 0)
     \item There are only 2 types of vehicles: motorbike and van. \\ type CHAR(15) CHECK (type in ('motorbike', 'van'))
 \end{itemize}
 \subsubsection{Person}
@@ -308,7 +308,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \begin{itemize}
     \item As in the case of Person, an Employee is identified by its VAT number. \\ vat CHAR(15) PRIMARY KEY REFERENCES Person
     \item An Employee is assigned to a PostOffice. \\ postOffice INT NOT NULL REFERENCES PostOffice(id)
-    \item An Employee gets paid a monthly salary, obviously greater than zero. \\ salary DECIMAL(38, 2) NOT NULL CHECK (salary >= 0)
+    \item An Employee gets paid a monthly salary, obviously greater than zero. \\ salary DECIMAL(38, 2) NOT NULL CHECK (salary $>=$ 0)
 \end{itemize}
 \subsubsection{Manager}
 \begin{itemize}
@@ -332,13 +332,13 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item For each delivery, we know who registered it by his/her VAT. \\ registeredBy CHAR(15) NOT NULL REFERENCES ShopKeeper(vat)
     \item As a Delivery is being prepared for delivery, it can be assigned to an order. \\ order\_ INT NULL REFERENCES Order\_(id)
     \item On insertion, each Delivery is assigned by default the current time for its time of register. \\ timeRegister TIMESTAMP NOT NULL DEFAULT CURRENT\_TIMESTAMP
-    \item For each Delivery we know its weight. \\ weight FLOAT CHECK (weight > 0)
+    \item For each Delivery we know its weight. \\ weight FLOAT CHECK (weight $>$ 0)
     \item A Delivery must have an associated service. \\ service VARCHAR(31) NOT NULL REFERENCES Service(name)
 \end{itemize}
 \subsubsection{Category}
 \begin{itemize}
     \item A Category is uniquely identified by its name. \\ name VARCHAR(31) PRIMARY KEY
-    \item Each Category has a unique maximum weight, which is obviously positive. \\ maxWeight FLOAT UNIQUE CHECK(maxWeight > 0)
+    \item Each Category has a unique maximum weight, which is obviously positive. \\ maxWeight FLOAT UNIQUE CHECK(maxWeight $>$ 0)
 \end{itemize}
 \subsubsection{Service}
 \begin{itemize}
@@ -357,7 +357,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item An Order can only belong to one of two classes 'generalOrder' or 'lightOrder'. \\ type CHAR(12) CHECK (type in ('generalOrder', 'lightOrder'))
     \item An Order may be assigned a vehicle, otherwise the postman will be delivering on foot. \\ vehicle VARCHAR(31) NULL REFERENCES Vehicle(plate)
     \item An Order must be assigned to a postman. \\ postman CHAR(15) NOT NULL REFERENCES Postman(vat)
-    \item An Order can only finish after it started. \\ CHECK (timeBegin < timeEnd)
+    \item An Order can only finish after it started. \\ CHECK (timeBegin $<$ timeEnd)
 \end{itemize}
 \subsubsection{Bill}
 \begin{itemize}
