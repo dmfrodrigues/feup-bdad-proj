@@ -90,7 +90,7 @@ This version also includes the relational schema, functional dependencies, norma
 \section{Description}
 \subsection{General classes}
 \subsubsection{ZipCode}
-Postal code (the designation of "ZIP code" is exclusive of the United States and some other countries, but since it conveys the same information with a shorter name we decided to adopt it), uniquely identified by the ISO 3166-1 alpha-2 country code (e.g., "PT") and code (e.g., "6120-111")and is characterized by the town (usually comes right after postal code; e.g., "PORTO") and by the postman in charge of distributing mail to postal addresses under that postal code (if there is one).
+Postal code (the designation of "ZIP code" is exclusive of the United States and some other countries, but since it conveys the same information with a shorter name we decided to adopt it), uniquely identified by the ISO 3166-1 alpha-2 country code (e.g., "PT") and code (e.g., "6120-111") and is characterized by the town (usually comes right after postal code; e.g., "PORTO") and by the postman in charge of distributing mail to postal addresses under that postal code (if there is one).
 \subsubsection{Address}
 An address is uniquely identified by an ID, and is characterized by its postal code (country and code), street name, street number (primary door number) and door number (fraction, floor number, etc.).
 \subsubsection{PAddress}
@@ -126,12 +126,12 @@ Identifiable by its ID, each delivery keeps track of the time of registration, w
 Depending on the delivery, its payment can be done either by the purchase of a stamp (which is only valid should the delivery’s category be Document) and deposit at a postbox, or via a bill. A delivery paid via stamp has the fields numBill and seller as NULL.
 \subsubsection{Order}
 An order corresponds to a request of transporting a deliverable to its destination.\par
-It is characterized by its identification number as well as by the postman assigned to its delivery, by the vehicle used for that end and by the scheduled time of departure from, and arrival to, the post office by the postman.\par
+It is characterized by its identification number as well as by the postman assigned to its delivery, by the vehicle used for that end and by the scheduled time of departure from and arrival to the post office by the postman.\par
 It can either be a General Order or a Light Order depending on the category (and therefore on the weight) of the deliverables: light orders can only be used for deliveries which have Documents as its category. A light order can be fulfilled by foot.
 \subsubsection{Stamp}
 A stamp is an alternative to paying for a Document using a bill. A stamped document can be deposited in a postbox. Given stamps are specialized according to the service that will be used in transporting the Document, Stamp is associated to the class Service.
 \subsection{Bill}
-A bill can be used to buy products at a PostOffice, as well as to pay for any kind of deliverable. A bill uniquely identified by its bill number and seller VAT (which is the company the client is paying for a delivery), and is described by the price (which is the sum of prices of the items of the delivery plus any other item bought at the PostOffice), issue time, issuing shopKeeper and the client that paid for it.
+A bill can be used to buy products at a PostOffice, as well as to pay for any kind of deliverable. A bill is uniquely identified by its bill number and seller's VAT (which is the company the client is paying for a delivery), and is described by the price (which is the sum of prices of the items of the delivery plus any other item bought at the PostOffice), issue time, issuing shopKeeper and the client that paid for it.
 \subsubsection{CatalogItem}
 A catalog item has a corresponding ID (similar to a bar-code), description and current price. The list of all catalog items make up the catalog of products the PostalService has for sale.
 \subsubsection{BillItem}
@@ -291,7 +291,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \begin{itemize}
     \item A vehicle is recognized by its licensePlate. \\ plate CHAR(15) PRIMARY KEY
     \item A vehicle belongs to a specific PostOffice. \\ postOffice INT NOT NULL REFERENCES PostOffice(id)
-    \item The maximum weight a vehicle can transport must be a positive value. \\ maxWeight FLOAT CHECK (maxWeight > 0)
+    \item The maximum weight a vehicle can transport must be a positive value. \\ maxWeight FLOAT CHECK (maxWeight $>$ 0)
     \item There are only 2 types of vehicles: motorbike and van. \\ type CHAR(15) CHECK (type in ('motorbike', 'van'))
 \end{itemize}
 \subsubsection{Person}
@@ -308,7 +308,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \begin{itemize}
     \item As in the case of Person, an Employee is identified by its VAT number. \\ vat CHAR(15) PRIMARY KEY REFERENCES Person
     \item An Employee is assigned to a PostOffice. \\ postOffice INT NOT NULL REFERENCES PostOffice(id)
-    \item An Employee gets paid a monthly salary, obviously greater than zero. \\ salary DECIMAL(38, 2) NOT NULL CHECK (salary >= 0)
+    \item An Employee gets paid a monthly salary, obviously greater than zero. \\ salary DECIMAL(38, 2) NOT NULL CHECK (salary $>=$ 0)
 \end{itemize}
 \subsubsection{Manager}
 \begin{itemize}
@@ -332,13 +332,13 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item For each delivery, we know who registered it by his/her VAT. \\ registeredBy CHAR(15) NOT NULL REFERENCES ShopKeeper(vat)
     \item As a Delivery is being prepared for delivery, it can be assigned to an order. \\ order\_ INT NULL REFERENCES Order\_(id)
     \item On insertion, each Delivery is assigned by default the current time for its time of register. \\ timeRegister TIMESTAMP NOT NULL DEFAULT CURRENT\_TIMESTAMP
-    \item For each Delivery we know its weight. \\ weight FLOAT CHECK (weight > 0)
+    \item For each Delivery we know its weight. \\ weight FLOAT CHECK (weight $>$ 0)
     \item A Delivery must have an associated service. \\ service VARCHAR(31) NOT NULL REFERENCES Service(name)
 \end{itemize}
 \subsubsection{Category}
 \begin{itemize}
     \item A Category is uniquely identified by its name. \\ name VARCHAR(31) PRIMARY KEY
-    \item Each Category has a unique maximum weight, which is obviously positive. \\ maxWeight FLOAT UNIQUE CHECK(maxWeight > 0)
+    \item Each Category has a unique maximum weight, which is obviously positive. \\ maxWeight FLOAT UNIQUE CHECK(maxWeight $>$ 0)
 \end{itemize}
 \subsubsection{Service}
 \begin{itemize}
@@ -357,14 +357,14 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item An Order can only belong to one of two classes 'generalOrder' or 'lightOrder'. \\ type CHAR(12) CHECK (type in ('generalOrder', 'lightOrder'))
     \item An Order may be assigned a vehicle, otherwise the postman will be delivering on foot. \\ vehicle VARCHAR(31) NULL REFERENCES Vehicle(plate)
     \item An Order must be assigned to a postman. \\ postman CHAR(15) NOT NULL REFERENCES Postman(vat)
-    \item An Order can only finish after it started. \\ CHECK (timeBegin < timeEnd)
+    \item An Order can only finish after it started. \\ CHECK (timeBegin $<$ timeEnd)
 \end{itemize}
 \subsubsection{Bill}
 \begin{itemize}
     \item A Bill is issued by a PostalService as a seller. \\ seller CHAR(15) REFERENCES PostalService(vat)
     \item A Bill must be assigned an issue time, and it defaults to the current time on insertion. \\ timeIssue TIMESTAMP NOT NULL DEFAULT CURRENT\_TIMESTAMP
     \item A Bill must have a price, which was charged to the customer on issue. \\ price DECIMAL(12, 2) NOT NULL
-    \item A Bill references the client that is paying for it. \\ consumer CHAR(15) NOT NULL REFERENCES Client(vat)
+    \item A Bill references the client that is paying it. \\ consumer CHAR(15) NOT NULL REFERENCES Client(vat)
     \item A Bill references the ShopKeeper that processed the sale. \\ issuer CHAR(15) NOT NULL REFERENCES ShopKeeper(vat)
     \item A Bill is uniquely identified by its seller and its bill number. \\ PRIMARY KEY (numBill, seller)
 \end{itemize}
