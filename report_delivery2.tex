@@ -123,12 +123,11 @@ A postman is an employee (therefore being a subclass of Employee) responsible fo
 \subsection{Delivery}
 A delivery is requested by the client and registered by a shopKeeper. \par
 Identifiable by its ID, each delivery keeps track of the time of registration, weight, and the postal addresses of the origin and destination (thus connecting this class to PAddress).\par
-Depending on the delivery, its payment can be done either by the purchase of a stamp (which is only valid should the delivery’s category be Document) and deposit at a postbox, or via a bill. A delivery paid via stamp has the fields numBill and seller as NULL.
+Depending on the delivery, its payment can be done either by the purchase of a stamp (which is only valid should the delivery’s category be Document) and deposit at a postbox, or via a bill. A delivery paid via stamp has the fields numBill and seller set to NULL.
 \subsubsection{Category}
-A category is related with the class delivery, service and price. Corresponds to a classification of the package in which the item(s) is/are to be delivered and is characterized by a name out of three possibilities, having a maximum weight associated with each of them: it is classified as a Document if it weighs under 0.100kg, as Parcel if under 2.000kg or Overweight otherwise (up to 10.000kg).
+A category is related with classes Delivery, Service and Price. It corresponds to a classification of deliveries by weight, where each Category is characterized by a name out of three possibilities, having a maximum weight associated with each of them: it is classified as a Document if it weighs under 0.100kg, as Parcel if under 2.000kg or Overweight otherwise (up to 10.000kg).
 \subsubsection{Service}
-A service represents an option of delivery of an order, being identifiable by its name. \par
-There are three types of services: Economy, Express and Registered.
+A service represents an option of delivery of an order, being identifiable by its name. There are three types of services: Economy, Express and Registered.
 \subsubsection{Price}
 The price of a delivery is determined not only by the type of service chosen but also by its category, being therefore connected to these classes.
 \subsubsection{Order}
