@@ -122,14 +122,19 @@ A shopKeeper is a sales Employee (thus extending the class Employee) who is resp
 A postman is an employee (therefore being a subclass of Employee) responsible for home-to-home mail distribution. A postman is assigned a group of postal codes.
 \subsection{Delivery}
 A delivery is requested by the client and registered by a shopKeeper. \par
-Identifiable by its ID, each delivery keeps track of the time of registration, weight, and the postal addresses of the origin and destination (thus connecting this class to PAddress). A delivery’s price is determined not only by the type of service chosen (Economy, Express or Registered) but also by its category; it is classified as a Document if it weighs under 0.100kg, as Parcel if under 2.000kg or Overweight otherwise (up to 10.000kg).\par
+Identifiable by its ID, each delivery keeps track of the time of registration, weight, and the postal addresses of the origin and destination (thus connecting this class to PAddress).\par
 Depending on the delivery, its payment can be done either by the purchase of a stamp (which is only valid should the delivery’s category be Document) and deposit at a postbox, or via a bill. A delivery paid via stamp has the fields numBill and seller as NULL.
+\subsubsection{Category}
+A category is related with the class delivery, service and price. Corresponds to a classification of the package in which the item(s) is/are to be delivered and is characterized by a name out of three possibilities, having a maximum weight associated with each of them: it is classified as a Document if it weighs under 0.100kg, as Parcel if under 2.000kg or Overweight otherwise (up to 10.000kg).
+\subsubsection{Service}
+A service represents an option of delivery of an order, being identifiable by its name. \par
+There are three types of services: Economy, Express and Registered.
+\subsubsection{Price}
+The price of a delivery is determined not only by the type of service chosen but also by its category, being therefore connected to these classes.
 \subsubsection{Order}
 An order corresponds to a request of transporting a deliverable to its destination.\par
 It is characterized by its identification number as well as by the postman assigned to its delivery, by the vehicle used for that end and by the scheduled time of departure from and arrival to the post office by the postman.\par
 It can either be a General Order or a Light Order depending on the category (and therefore on the weight) of the deliverables: light orders can only be used for deliveries which have Documents as its category. A light order can be fulfilled by foot.
-\subsubsection{Stamp}
-A stamp is an alternative to paying for a Document using a bill. A stamped document can be deposited in a postbox. Given stamps are specialized according to the service that will be used in transporting the Document, Stamp is associated to the class Service.
 \subsection{Bill}
 A bill can be used to buy products at a PostOffice, as well as to pay for any kind of deliverable. A bill is uniquely identified by its bill number and seller's VAT (which is the company the client is paying for a delivery), and is described by the price (which is the sum of prices of the items of the delivery plus any other item bought at the PostOffice), issue time, issuing shopKeeper and the client that paid for it.
 \subsubsection{CatalogItem}
