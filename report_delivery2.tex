@@ -144,11 +144,11 @@ A bill item represents a particular line in a Bill, meaning it identifies the ki
 \chapter{Relational model}
 \begin{center} \setlength{\tabcolsep}{1pt}
     \begin{tabular}{r p{144mm}}
-        ZipCode         & (\uline{country}, \uline{number}, town, postman$\rightarrow$Postman)  \\
+        ZipCode         & (\uline{country}, \uline{code}, town, postman$\rightarrow$Postman)  \\
         Address         & (\uline{idAddress}, (zipNumber, country)$\rightarrow$ZipCode, streetName, streetNumber, doorNumber, personName) \\
         PostalService   & (\uline{vat}, name, headquarters$\rightarrow$PostOffice)              \\
         PostOffice      & (\uline{idPostOffice}, name, address$\rightarrow$Address, postalService$\rightarrow$PostalService) \\
-        Vehicle         & (\uline{licensePlate}, postOffice$\rightarrow$PostOffice, maxWeight, type) \\
+        Vehicle         & (\uline{plate}, postOffice$\rightarrow$PostOffice, maxWeight, type) \\
                         & $\text{type} \in \{\text{"motorbike"}, \text{"van"}\}$\\
         Person          & (\uline{vat}, name, address$\rightarrow$Address, phoneNumber)         \\
         Client          & (\uline{vat}$\rightarrow$Person)                                      \\
