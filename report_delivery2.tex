@@ -157,12 +157,14 @@ A bill item represents a particular line in a Bill, meaning it identifies the ki
         ShopKeeper      & (\uline{vat}$\rightarrow$Employee, supervisor$\rightarrow$Manager)    \\
         Postman         & (\uline{vat}$\rightarrow$Employee, supervisor$\rightarrow$Manager)    \\
         Delivery        & (\uline{idDelivery}, from$\rightarrow$PAddress, to$\rightarrow$PAddress, registeredBy$\rightarrow$ShopKeeper, order$\rightarrow$Order, timeRegister, weight, category, service, (numBill, seller)$\rightarrow$Bill) \\
+        Category        & (\uline{name}, maxWeight) \\
+        Service         & (\uline{name}) \\
+        Price           & (\uline{category}$\rightarrow$Category, \uline{service}$\rightarrow$Service, price) \\
         Order           & (\uline{idOrder}, timeBegin, timeEnd, type, vehicle$\rightarrow$Vehicle, postman$\rightarrow$Postman) \\
                         & $\text{type} \in \{\text{"generalOrder"}, \text{"lightOrder"}\}$\\
         Bill            & (\uline{numBill}, \uline{seller}$\rightarrow$PostalService, timeIssue, price, consumer$\rightarrow$Client, issuer$\rightarrow$ShopKeeper)                                   \\
         CatalogItem     & (\uline{idCatalogItem}, description, price)                           \\
-        BillItem        & ((\uline{numBill}, \uline{seller})$\rightarrow$Bill, \uline{catalogItem}$\rightarrow$CatalogItem, priceThen, amount) \\
-        Price           & (\uline{category}$\rightarrow$Category, \uline{service}$\rightarrow$Service, price)
+        BillItem        & ((\uline{numBill}, \uline{seller})$\rightarrow$Bill, \uline{catalogItem}$\rightarrow$CatalogItem, priceThen, amount)
     \end{tabular}
 \end{center}
 \chapter{Functional dependencies and normal forms}
@@ -232,6 +234,19 @@ It is also in the 2NF, given $\{\text{idDelivery}\}$ is a candidate key (we thus
 It is not however in the 3NF, given the second functional dependency is a 3NF-violation since $\{\text{weight}\}$ is not a superkey nor is category a prime attribute. Since BCNF is a subset of 3NF, then the second functional dependency is also a BCNF-violation.\par
 This violation takes place because this attribute's value is directly calculated from weight, which is but a consequence of the method presented in this course for transforming the UML into a list of relations, which suggests translating derivable UML attributes into regular relational attributes associated to their respective functional dependencies. \par
 Had we considered this attribute to be calculated on-the-fly as a temporary variable, this violation would not take place. This is in fact the approach we will take to compress this particular table, thus meaning the actual database will not include the aforementioned violation.
+\subsubsection{Category}
+\begin{alignat*}{2}
+    \{\text{name}\} & \rightarrow \{\text{maxWeight}\} \\
+    \{\text{maxWeight}\} & \rightarrow \{\text{name}\}
+\end{alignat*}
+This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
+\subsubsection{Service}
+This relation is in the BCNF, given that it does not have any nontrivial functional dependencies. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
+\subsubsection{Price}
+\begin{alignat*}{2}
+    \{\text{category},\text{service}\} \rightarrow \{\text{price}\}
+\end{alignat*}
+This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Order}
 \begin{alignat*}{2}
     \{\text{idOrder}\} \rightarrow \{\text{timeBegin},\text{timeEnd},\text{type},\text{vehicle},\text{postman}\}
@@ -250,11 +265,6 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \subsubsection{BillItem}
 \begin{alignat*}{2}
     \{\text{numBill},\text{seller},\text{catalogItem}\} \rightarrow \{\text{priceThen},\text{amount}\}
-\end{alignat*}
-This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
-\subsubsection{Price}
-\begin{alignat*}{2}
-    \{\text{category},\text{service}\} \rightarrow \{\text{price}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 
