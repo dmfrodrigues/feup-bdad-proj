@@ -364,7 +364,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item A Bill is issued by a PostalService as a seller. \\ seller CHAR(15) REFERENCES PostalService(vat)
     \item A Bill must be assigned an issue time, and it defaults to the current time on insertion. \\ timeIssue TIMESTAMP NOT NULL DEFAULT CURRENT\_TIMESTAMP
     \item A Bill must have a price, which was charged to the customer on issue. \\ price DECIMAL(12, 2) NOT NULL
-    \item A Bill references the client that is paying for it. \\ consumer CHAR(15) NOT NULL REFERENCES Client(vat)
+    \item A Bill references the client that is paying it. \\ consumer CHAR(15) NOT NULL REFERENCES Client(vat)
     \item A Bill references the ShopKeeper that processed the sale. \\ issuer CHAR(15) NOT NULL REFERENCES ShopKeeper(vat)
     \item A Bill is uniquely identified by its seller and its bill number. \\ PRIMARY KEY (numBill, seller)
 \end{itemize}
