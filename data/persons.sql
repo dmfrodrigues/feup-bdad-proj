@@ -1,10 +1,3 @@
-INSERT INTO PostalService(vat, name) VALUES ("‎500077568", "CTT Correios de Portugal, S.A.");
-
-INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (0, "1999-001", "PT", "Avenida Dom João II", "13");
-INSERT INTO PostOffice(id, name, address, postalService) VALUES (1, "Parque das Nações", 0, "‎500077568");
-
-UPDATE PostalService SET hq=1 WHERE vat="‎500077568";
-
 INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (1, "4475-617", "PT", "Rua de S. João", "42");
 INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("2211998877", "Atílio Pinto Valido", 1, "+351 919198211");
 INSERT INTO Client(vat) VALUES ("2211998877");
