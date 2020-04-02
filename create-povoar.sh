@@ -6,3 +6,5 @@ cat data/persons.sql >> povoar.sql
 cat data/prices.sql >> povoar.sql
 cat data/catalog.sql >> povoar.sql
 cat data/bills.sql >> povoar.sql
+cat data/orders.sql >> povoar.sql
+cat data/deliveries.sql >> povoar.sql
