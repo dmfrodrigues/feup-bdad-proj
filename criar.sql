@@ -106,7 +106,11 @@ CREATE TABLE Delivery (
     order_          INT         NULL REFERENCES Order_(id) ON UPDATE CASCADE            ,
     timeRegister    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP   ,
     weight          FLOAT       CHECK (weight > 0)          ,
-    service         VARCHAR(31) NOT NULL REFERENCES Service(name) ON UPDATE CASCADE
+    service         VARCHAR(31) NOT NULL REFERENCES Service(name) ON UPDATE CASCADE,
+    numBill         INT,
+    seller          CHAR(15),
+    FOREIGN KEY (numBill, seller) REFERENCES Bill(numBill, seller),
+    CHECK (((numBill IS NULL) AND (seller IS NULL))OR((numBill IS NOT NULL) AND (seller IS NOT NULL)))
 );
 
 CREATE TABLE Category (
@@ -154,7 +158,7 @@ CREATE TABLE CatalogItem (
 CREATE TABLE BillItem (
     numBill         INT             NOT NULL,
     seller          CHAR(15)        NOT NULL,
-    catalogItem     INT             NOT NULL REFERENCES CatalogItem(idCatalogItem) ON UPDATE CASCADE,
+    catalogItem     INT             NOT NULL REFERENCES CatalogItem(id) ON UPDATE CASCADE,
     priceThen       DECIMAL(12, 2)  ,
     amount          INT             CHECK(amount > 0),
     PRIMARY KEY (numBill, seller, catalogItem),

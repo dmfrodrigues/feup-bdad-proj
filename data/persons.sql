@@ -16,7 +16,7 @@ INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("418687874", "Fernan
 INSERT INTO Employee(vat, postOffice, salary) VALUES ("418687874", 1, 980.15);
 INSERT INTO Postman(vat, supervisor) VALUES ("418687874", "224692997");
 
-INSERT INTO Address(id, zipCode, country, streetName, streetNumber, doorNumber) VALUES (5, "7500-639", "PT", "Avenida Torta", "2", "19o Dir.");
+INSERT INTO Address(id, zipCode, country, streetName, streetNumber, doorNumber) VALUES (5, "7500-170", "PT", "Avenida Torta", "2", "19o Dir.");
 INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("334547958", "Inácio Agostinho Gomes", 5, "+351 917712345");
 INSERT INTO Employee(vat, postOffice, salary) VALUES ("334547958", 1, 769.00);
 INSERT INTO Postman(vat, supervisor) VALUES ("334547958", "224692997");
