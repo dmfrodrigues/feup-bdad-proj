@@ -350,6 +350,8 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item On insertion, each Delivery is assigned by default the current time for its time of register. \\ timeRegister TIMESTAMP NOT NULL DEFAULT CURRENT\_TIMESTAMP
     \item For each Delivery we know its weight. \\ weight FLOAT CHECK (weight $>$ 0)
     \item A Delivery must have an associated service. \\ service VARCHAR(31) NOT NULL REFERENCES Service(name)
+    \item A Delivery references its pay method from its numBill and seller. \\ FOREIGN KEY (numBill, seller) REFERENCES Bill(numBill, seller)
+    \item A Delivery is paid via stamp (both fields NULL) or via a Bill. \\ CHECK (((numBill IS NULL) AND (seller IS NULL))OR((numBill IS NOT NULL) AND (seller IS NOT NULL)))
 \end{itemize}
 \subsubsection{Category}
 \begin{itemize}
