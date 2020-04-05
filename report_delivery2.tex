@@ -92,7 +92,7 @@ We deliberately make little to no reference to the workings of a postal service 
 \subsection{General classes}
 \subsubsection{ZipCode}
 A postal code is uniquely identified by the ISO 3166-1 alpha-2 country code (e.g., "PT") and code (e.g., "6120-111") and is characterized by the town (usually comes right after postal code; e.g., "PORTO") and by the postman in charge of distributing mail to postal addresses under that postal code (if there is one).\par
-The designation of "ZIP code" is exclusive of the United States and some other countries, but since it conveys the same information with a shorter name we decided to adopt it.
+The designation of "ZIP code" is exclusive of the United States of America, but since it conveys the same information with a shorter name we decided to adopt it.
 \subsubsection{Address}
 An address is uniquely identified by an ID and is characterized by its postal code (country and code), street name, street number (primary door number) and door number (fraction, floor number, etc.).
 \subsubsection{PAddress}
@@ -151,9 +151,9 @@ A bill item represents a particular line in a Bill, meaning it identifies the ki
 \begin{center} \setlength{\tabcolsep}{1pt}
     \begin{tabular}{r p{144mm}}
         ZipCode         & (\uline{country}, \uline{code}, town, postman$\rightarrow$Postman)  \\
-        Address         & (\uline{idAddress}, (zipNumber, country)$\rightarrow$ZipCode, streetName, streetNumber, doorNumber, personName) \\
+        Address         & (\uline{id}, (zipNumber, country)$\rightarrow$ZipCode, streetName, streetNumber, doorNumber, personName) \\
         PostalService   & (\uline{vat}, name, headquarters$\rightarrow$PostOffice)              \\
-        PostOffice      & (\uline{idPostOffice}, name, address$\rightarrow$Address, postalService$\rightarrow$PostalService) \\
+        PostOffice      & (\uline{id}, name, address$\rightarrow$Address, postalService$\rightarrow$PostalService) \\
         Vehicle         & (\uline{plate}, postOffice$\rightarrow$PostOffice, maxWeight, type) \\
                         & $\text{type} \in \{\text{"motorbike"}, \text{"van"}\}$\\
         Person          & (\uline{vat}, name, address$\rightarrow$Address, phoneNumber)         \\
@@ -162,26 +162,26 @@ A bill item represents a particular line in a Bill, meaning it identifies the ki
         Manager         & (\uline{vat}$\rightarrow$Employee)                                    \\
         ShopKeeper      & (\uline{vat}$\rightarrow$Employee, supervisor$\rightarrow$Manager)    \\
         Postman         & (\uline{vat}$\rightarrow$Employee, supervisor$\rightarrow$Manager)    \\
-        Delivery        & (\uline{idDelivery}, from$\rightarrow$PAddress, to$\rightarrow$PAddress, registeredBy$\rightarrow$ShopKeeper, order$\rightarrow$Order, timeRegister, weight, category, service, (numBill, seller)$\rightarrow$Bill) \\
+        Delivery        & (\uline{id}, from$\rightarrow$PAddress, to$\rightarrow$PAddress, registeredBy$\rightarrow$ShopKeeper, order$\rightarrow$Order, timeRegister, weight, category, service, (numBill, seller)$\rightarrow$Bill) \\
         Category        & (\uline{name}, maxWeight) \\
         Service         & (\uline{name}) \\
         Price           & (\uline{category}$\rightarrow$Category, \uline{service}$\rightarrow$Service, price) \\
-        Order           & (\uline{idOrder}, timeBegin, timeEnd, type, vehicle$\rightarrow$Vehicle, postman$\rightarrow$Postman) \\
+        Order           & (\uline{id}, timeBegin, timeEnd, type, vehicle$\rightarrow$Vehicle, postman$\rightarrow$Postman) \\
                         & $\text{type} \in \{\text{"generalOrder"}, \text{"lightOrder"}\}$\\
         Bill            & (\uline{numBill}, \uline{seller}$\rightarrow$PostalService, timeIssue, price, consumer$\rightarrow$Client, issuer$\rightarrow$ShopKeeper)                                   \\
-        CatalogItem     & (\uline{idCatalogItem}, description, price)                           \\
+        CatalogItem     & (\uline{id}, description, price)                           \\
         BillItem        & ((\uline{numBill}, \uline{seller})$\rightarrow$Bill, \uline{catalogItem}$\rightarrow$CatalogItem, priceThen, amount)
     \end{tabular}
 \end{center}
 \chapter{Functional dependencies and normal forms}
 \subsubsection{ZipCode}
 \begin{alignat*}{2}
-\{\text{country},\text{number}\} \rightarrow \{\text{town}, \text{postman}\}
+\{\text{country},\text{code}\} \rightarrow \{\text{town}, \text{postman}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Address}
 \begin{alignat*}{2}
-\{\text{idAddress}\} \rightarrow \{\text{zipNumber}, \text{country}, \text{streetName}, \text{streetNumber}, \text{doorNumber}, \text{personName}\}
+\{\text{id}\} \rightarrow \{\text{zipNumber}, \text{country}, \text{streetName}, \text{streetNumber}, \text{doorNumber}, \text{personName}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{PostalService}
@@ -191,13 +191,13 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{PostOffice}
 \begin{alignat*}{2}
-\{\text{idPostOffice}\} &\rightarrow \{\text{name},\text{address},\text{postalService}\} \\
-\{\text{name}\} &\rightarrow \{\text{idPostOffice}\} \\
+\{\text{id}\} &\rightarrow \{\text{name},\text{address},\text{postalService}\} \\
+\{\text{name}\} &\rightarrow \{\text{id}\} \\
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey (including $\{\text{name}\}$, given that $\{\text{name}\}^+ = \{\text{name}, \text{idPostOffice}\}^+ = \{\text{name}, \text{idPostOffice}, \text{address}, \text{postalService}\}$). Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Vehicle}
 \begin{alignat*}{2}
-\{\text{licensePlate}\} \rightarrow \{\text{postOffice},\text{maxWeight},\text{type}\}
+\{\text{plate}\} \rightarrow \{\text{postOffice},\text{maxWeight},\text{type}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Person}
@@ -206,37 +206,31 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Client}
-\begin{alignat*}{2}
-\{\text{vat}\} \rightarrow \{\text{name},\text{address},\text{phoneNumber}\}
-\end{alignat*}
-This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
+This relation is in the BCNF, given that it does not have any nontrivial functional dependencies. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Employee}
 \begin{alignat*}{2}
-\{\text{vat}\} \rightarrow \{\text{name},\text{address},\text{phoneNumber},\text{postOffice},\text{salary}\}
+\{\text{vat}\} \rightarrow \{\text{postOffice},\text{salary}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Manager}
-\begin{alignat*}{2}
-\{\text{vat}\} \rightarrow \{\text{name},\text{address},\text{phoneNumber},\text{postOffice},\text{salary}\}
-\end{alignat*}
-This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
+This relation is in the BCNF, given that it does not have any nontrivial functional dependencies. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{ShopKeeper}
 \begin{alignat*}{2}
-\{\text{vat}\} \rightarrow \{\text{name},\text{address},\text{phoneNumber},\text{postOffice},\text{salary}, \text{supervisor}\}
+\{\text{vat}\} \rightarrow \{\text{supervisor}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Postman}
 \begin{alignat*}{2}
-\{\text{vat}\} \rightarrow \{\text{name},\text{address},\text{phoneNumber},\text{postOffice},\text{salary}, \text{supervisor}\}
+\{\text{vat}\} \rightarrow \{\text{supervisor}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Delivery}
 \begin{alignat*}{2}
-\{\text{idDelivery}\} &\rightarrow \{\text{from},\text{to},\text{registeredBy},\text{order},\text{timeRegister},\text{weight},\text{service},\text{numBill},\text{seller}\} \\
+\{\text{id}\} &\rightarrow \{\text{from},\text{to},\text{registeredBy},\text{order},\text{timeRegister},\text{weight},\text{service},\text{numBill},\text{seller}\} \\
 \{\text{weight}\} &\rightarrow \{\text{category}\}
 \end{alignat*}
 This relation is in the 1NF, given the domain of each attribute contains only atomic values, and that the value of each attribute contains only a single value from that domain (in short, no attribute is a list/set, but rather an atomic value).\par
-It is also in the 2NF, given $\{\text{idDelivery}\}$ is a candidate key (we thus ignore the first dependency), added to the fact that, although category is non-prime, $\{\text{weight}\}$ is not a proper subset of a candidate key. \par
+It is also in the 2NF, given $\{\text{id}\}$ is a candidate key (we thus ignore the first dependency), added to the fact that, although category is non-prime, $\{\text{weight}\}$ is not a proper subset of a candidate key. \par
 It is not however in the 3NF, given the second functional dependency is a 3NF-violation since $\{\text{weight}\}$ is not a superkey nor is category a prime attribute. Since BCNF is a subset of 3NF, then the second functional dependency is also a BCNF-violation.\par
 This violation takes place because this attribute's value is directly calculated from weight, which is but a consequence of the method presented in this course for transforming the UML into a list of relations, which suggests translating derivable UML attributes into regular relational attributes associated to their respective functional dependencies. \par
 Had we considered this attribute to be calculated on-the-fly as a temporary variable, this violation would not happen. This is in fact the approach we will take to compress this particular table, thus meaning the actual database will not include the aforementioned violation.
@@ -255,7 +249,7 @@ This relation is in the BCNF, given that it does not have any nontrivial functio
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Order}
 \begin{alignat*}{2}
-\{\text{idOrder}\} \rightarrow \{\text{timeBegin},\text{timeEnd},\text{type},\text{vehicle},\text{postman}\}
+\{\text{id}\} \rightarrow \{\text{timeBegin},\text{timeEnd},\text{type},\text{vehicle},\text{postman}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{Bill}
@@ -265,7 +259,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{CatalogItem}
 \begin{alignat*}{2}
-\{\text{idCatalogItem}\} \rightarrow \{\text{description},\text{price}\}
+\{\text{id}\} \rightarrow \{\text{description},\text{price}\}
 \end{alignat*}
 This relation is in the BCNF, given that, in all nontrivial functional dependencies of the form $\overline{\text{A}} \rightarrow \overline{\text{B}}$ in this relation, $\overline{\text{A}}$ is a superkey. Since BCNF is a subset of 3NF, this relation is also in the 3NF.
 \subsubsection{BillItem}
