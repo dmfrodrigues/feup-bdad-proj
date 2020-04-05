@@ -21,7 +21,7 @@
     frame=tb, % draw frame at top and bottom of the code
     tabsize=4, % tab space width
     numbers=left, % display line numbers on the left
-	showstringspaces=false, % don't mark spaces in strings    
+	showstringspaces=false, % don't mark spaces in strings
     commentstyle=\color{green}, % comment color
     keywordstyle=\color{blue}, % keyword color
     stringstyle=\color{red} % string color
@@ -71,7 +71,7 @@
 \author{
 Group 605 \vspace{0.5em} \\
 \begin{tabular}{r l}
-	\email{up201806429@fe.up.pt} & Diogo Miguel Ferreira Rodrigues        \\
+	\email{up201806429@fe.up.pt} & Diogo Miguel Ferreira Rodrigues \\
 	\email{up201806613@fe.up.pt} & João António Cardoso Vieira e Basto de Sousa \\
 	\email{up201806330@fe.up.pt} & Rafael Soares Ribeiro \\
 \end{tabular}
@@ -392,7 +392,7 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item A BillItem must refer to a CatalogItem \\ catalogItem INT NOT NULL REFERENCES CatalogItem(idCatalogItem)
     \item A BillItem registers the amount of a CatalogItem bought, which must obviously be more than zero. \\ amount INT CHECK(amount $>$ 0)
     \item A BillItem is uniquely identified by its Bill's identifiers (numBill and seller) and the CatalogItem it refers to. \\ PRIMARY KEY (numBill, seller, catalogItem)
-    \item A BillItem refers to its Bill through (numBill, seller). \\ FOREIGN KEY (numBill, seller)   REFERENCES Bill(numBill, seller)
+    \item A BillItem refers to its Bill through (numBill, seller). \\ FOREIGN KEY (numBill, seller) REFERENCES Bill(numBill, seller)
 \end{itemize}
 
 \end{document}
