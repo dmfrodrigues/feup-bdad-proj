@@ -6,6 +6,14 @@ INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (2, "
 INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("123456789", "Lurdes Cipriano Bensaúde", 2, "+351 914732918");
 INSERT INTO Client(vat) VALUES ("123456789");
 
+INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (23, "2750-232", "PT", "Rua D. Manuel", "1");
+INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("928502953", "Abrão Reino Perigão", 23, "+351 926312222");
+INSERT INTO Client(vat) VALUES ("928502953");
+
+INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (24, "2705-089", "PT", "Avenida Perdida", "20");
+INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("222999873", "Rui Calçada Zarco", 24, "+351 945666777");
+INSERT INTO Client(vat) VALUES ("222999873");
+
 INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (3, "4980-792", "PT", "Rua da Fortaleza", "12");
 INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("224692997", "Elias Fortes Marreiro", 3, "+351 784701869");
 INSERT INTO Employee(vat, postOffice, salary) VALUES ("224692997", 1, 1550.27);
@@ -20,6 +28,11 @@ INSERT INTO Address(id, zipCode, country, streetName, streetNumber, doorNumber) 
 INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("334547958", "Inácio Agostinho Gomes", 5, "+351 917712345");
 INSERT INTO Employee(vat, postOffice, salary) VALUES ("334547958", 1, 769.00);
 INSERT INTO Postman(vat, supervisor) VALUES ("334547958", "224692997");
+
+INSERT INTO Address(id, zipCode, country, streetName, streetNumber, doorNumber) VALUES (25, "2660-423", "PT", "Rua da Raposa", "444");
+INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("998765222", "Gabriela Pêssego Inácio", 25, "+351 922222444");
+INSERT INTO Employee(vat, postOffice, salary) VALUES ("998765222", 1, 900.00);
+INSERT INTO Postman("998765222", "224692997");
 
 INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (6, "2620-216", "PT", "Rua da Ramada Comprida", "1810");
 INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("643378204", "Abrão Paiva Brum", 6, "+351 178343902");
