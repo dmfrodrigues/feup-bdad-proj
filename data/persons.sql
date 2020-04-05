@@ -25,3 +25,13 @@ INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (6, "
 INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("643378204", "Abrão Paiva Brum", 6, "+351 178343902");
 INSERT INTO Employee(vat, postOffice, salary) VALUES ("643378204", 1, 690.95);
 INSERT INTO ShopKeeper(vat, supervisor) VALUES ("643378204", "224692997");
+
+INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (13, "2415-139", "PT", "Rua Amarela", "34");
+INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("223456483", "Francisca Joaquina Ramalde", 13, "+351 990223166");
+INSERT INTO Employee(vat, postOffice, salary) VALUES ("223456483", 1, 659.80);
+INSERT INTO ShopKeeper(vat, supervisor) VALUES ("223456483", "224692997");
+
+INSERT INTO Address(id, zipCode, country, streetName, streetNumber) VALUES (14, "2420-414", "PT", "Avenida Azul", "99");
+INSERT INTO Person(vat, name, address, phoneNumber) VALUES ("987264567", "Sebastião Alvim Santos", 14, "+351 917732456");
+INSERT INTO Employee(vat, postOffice, salary) VALUES ("987264567", 1, 765.45);
+INSERT INTO ShopKeeper(vat, supervisor) VALUES ("987264567", "224692997");
