@@ -17,5 +17,8 @@ jobs:
     - name: Install sqlite3
       run: sudo apt install -y sqlite3
 
+    - name: Create povoar.sql
+      run: ./create-povoar.sql
+
     - name: Test
       run: make test

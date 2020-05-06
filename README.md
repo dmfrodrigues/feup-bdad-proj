@@ -1,5 +1,7 @@
 # BDAD
 
+![test](https://github.com/dmfrodrigues/feup-bdad-proj/workflows/test/badge.svg)
+
 To create povoar.sql, run
 ```bash
 ./create-povoar.sh
