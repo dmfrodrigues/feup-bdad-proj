@@ -23,6 +23,6 @@ SELECT name FROM (
 
 - [x] Calculate Bill price
 - [x] If stamp, delivery must be light
-- [ ] When inserting/updating a Postman, check if he's already a Manager or ShopKeeper
+- [x] When inserting/updating a Postman, check if he's already a Manager or ShopKeeper
 - [ ] Check if lightDelivery is being made by motorbike, and generalOrder by a van
 - [ ] Addresses of people and stores must have a NULL personName
