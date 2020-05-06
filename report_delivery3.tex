@@ -402,4 +402,28 @@ This relation is in the BCNF, given that, in all nontrivial functional dependenc
     \item Total weight transported on each Order.
 \end{enumerate}
 
+\chapter{Triggers}
+\section{Calculate bill price (\texttt{gatilho1})}
+\begin{itemize}
+    \item bill\_price\_insert
+    \item bill\_price\_update
+    \item bill\_price\_delete
+\end{itemize}
+Three triggers were implemented to enforce consistency between the price of a bill and the individual parcels (BillItems) that are part of it. For that, we update Bill.price when we change table BillItem (which are the events most likely to change Bill.price), namely by adding and subtracting the appropriate amounts.
+
+\section{Only documents can have stamps (\texttt{gatilho2})}
+\begin{itemize}
+    \item delivery\_stamp\_insert
+    \item delivery\_stamp\_update
+\end{itemize}
+Two triggers were implemented to enforce the condition that only documents can be paid with a stamp (i.e., only documents can have Delivery.numBill and Delivery.seller set to NULL).
+
+\section{An employee has only one role (\texttt{gatilho3})}
+\begin{itemize}
+    \item postman\_role\_insert
+    \item manager\_role\_insert
+    \item shopkeeper\_role\_insert
+\end{itemize}
+Three triggers were implemented to enforce the condition that an employee can only have one role at each time. For that end, these triggers check on insertion to each table if the new entry already exists in any other role table.
+
 \end{document}
