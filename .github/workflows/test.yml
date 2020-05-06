@@ -17,6 +17,9 @@ jobs:
     - name: Install sqlite3
       run: sudo apt install -y sqlite3
 
+    - name: Change permissions
+      run: sudo chmod u+x *.sh
+
     - name: Create povoar.sql
       run: ./create-povoar.sh
 
