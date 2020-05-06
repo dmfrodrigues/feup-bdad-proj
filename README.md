@@ -22,7 +22,7 @@ SELECT name FROM (
 ## Triggers
 
 - [x] Calculate Bill price
-- If stamp, delivery must be light
-- When inserting a Postman, check if he's already a Manager or ShopKeeper
-- Check if lightDelivery is being made by motorbike, and generalOrder by a van
-- Addresses of people and stores must have a NULL personName
+- [x] If stamp, delivery must be light
+- [ ] When inserting/updating a Postman, check if he's already a Manager or ShopKeeper
+- [ ] Check if lightDelivery is being made by motorbike, and generalOrder by a van
+- [ ] Addresses of people and stores must have a NULL personName
