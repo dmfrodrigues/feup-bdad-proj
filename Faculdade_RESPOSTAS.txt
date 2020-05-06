@@ -1,0 +1,29 @@
+SELECT nr FROM Aluno;
+SELECT cod, design FROM Cadeira WHERE curso='AC';
+SELECT nome FROM aluno INTERSECT SELECT nome FROM prof; || SELECT Nome FROM Aluno NATURAL JOIN PROF;
+SELECT nome FROM aluno EXCEPT SELECT nome FROM prof; || SELECT Nome FROM Aluno WHERE Nome NOT IN (SELECT Nome FROM Prof);
+SELECT Nome FROM Aluno UNION SELECT Nome FROM Prof;
+SELECT Nome FROM Aluno NATURAL JOIN Prova WHERE cod='TS1'; || SELECT Nome FROM Aluno, Prova WHERE cod='TS1' AND Aluno.nr=Prova.nr;
+SELECT Nome FROM Aluno, Prova, Cadeira WHERE curso = 'IS' AND Aluno.nr=Prova.nr AND Prova.cod=Cadeira.cod;
+SELECT DISTINCT nome FROM Aluno
+	WHERE nr NOT IN
+	(SELECT nr AS alunonr
+	FROM Aluno, Cadeira
+	WHERE curso='IS' AND NOT (cod IN
+	(SELECT cod
+	FROM Prova
+	WHERE nota>=10 AND nr=alunonr))
+	);
+SELECT max(nota) FROM Prova;
+SELECT avg(nota) FROM prova WHERE cod='BD';
+SELECT count(*) FROM Aluno;
+SELECT curso, count(*) FROM Cadeira GROUP BY curso;
+SELECT nr, count(*) FROM Prova GROUP BY nr;
+SELECT avg(numProvas) FROM (SELECT count(*) AS numProvas FROM Prova GROUP BY nr);
+SELECT nome, AVG(maxNota)
+	FROM (SELECT nome, cod, MAX(nota) maxNota
+	FROM Prova, Aluno
+	WHERE Prova.nr = Aluno.nr
+	AND nota >= 10
+	GROUP BY nome, cod)
+	GROUP BY nome;
