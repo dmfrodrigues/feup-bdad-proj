@@ -4,6 +4,9 @@
 
 -- SQLite keyworks: https://www.sqlite.org/lang_keywords.html
 
+.mode columns
+.headers on
+
 PRAGMA foreign_keys=OFF;
 
 DROP TABLE IF EXISTS ZipCode;
@@ -143,7 +146,7 @@ CREATE TABLE Bill (
     numBill         INT                                                  ,
     seller          CHAR(15)    REFERENCES PostalService(vat) ON UPDATE CASCADE         ,
     timeIssue       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP       ,
-    price           DECIMAL(12, 2) NOT NULL                              ,
+    price           DECIMAL(12, 2) NOT NULL DEFAULT 0                                   ,
     consumer        CHAR(15)    NOT NULL REFERENCES Client(vat) ON UPDATE CASCADE       ,
     issuer          CHAR(15)    NOT NULL REFERENCES ShopKeeper(vat) ON UPDATE CASCADE   ,
     PRIMARY KEY     (numBill, seller)

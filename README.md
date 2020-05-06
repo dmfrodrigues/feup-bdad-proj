@@ -5,10 +5,21 @@ To create povoar.sql, run
 ./create-povoar.sh
 ```
 
+# Notes
+
+Get category name for `Delivery` with `id=2`
+```sql
+SELECT name FROM (
+    SELECT name,min(maxWeight) FROM Category WHERE maxWeight>=(
+        SELECT weight FROM Delivery WHERE id=2
+    )
+);
+```
+
 # ToDo
 ## Triggers
 
-- Calculate Bill price
+- [x] Calculate Bill price
 - If stamp, delivery must be light
 - When inserting a Postman, check if he's already a Manager or ShopKeeper
 - Check if lightDelivery is being made by motorbike, and generalOrder by a van
