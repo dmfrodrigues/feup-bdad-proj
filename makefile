@@ -17,7 +17,16 @@ test: clean
 	make testtriggers
 
 testqueries: ctt.db
-	echo Testqueries
+	sqlite3 ctt.db ".read queries/int1.sql"
+	sqlite3 ctt.db ".read queries/int2.sql"
+	sqlite3 ctt.db ".read queries/int3.sql"
+	sqlite3 ctt.db ".read queries/int4.sql"
+	sqlite3 ctt.db ".read queries/int5.sql"
+	sqlite3 ctt.db ".read queries/int6.sql"
+	sqlite3 ctt.db ".read queries/int7.sql"
+	sqlite3 ctt.db ".read queries/int8.sql"
+	sqlite3 ctt.db ".read queries/int9.sql"
+	sqlite3 ctt.db ".read queries/int10.sql"
 
 testtriggers: ctt.db	
 	sqlite3 ctt.db ".read gatilho1_remove.sql"
