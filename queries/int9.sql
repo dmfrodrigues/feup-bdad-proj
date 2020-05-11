@@ -2,4 +2,4 @@
 .headers	on
 .nullvalue	NULL
 
-SELECT PostalService.name as Postal_Service_Name, sum(Bill.price) as Net_Profit FROM PostalService, Bill, Employee, PostOffice WHERE (PostOffice.id==Employee.postOffice AND Bill.issuer==Employee.vat);
+SELECT CatalogItem.description as Product_Description, BillItem.amount as Number_of_items, BillItem.amount * BillItem.priceThen as Net_Profit FROM BillItem NATURAL JOIN CatalogItem WHERE BillItem.catalogItem=CatalogItem.id ORDER BY BillItem.amount DESC;
