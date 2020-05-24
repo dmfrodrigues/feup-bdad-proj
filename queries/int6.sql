@@ -2,4 +2,4 @@
 .headers	on
 .nullvalue	NULL
 
-SELECT PostalService.name as Postal_Service, PostOffice.name as Headquarters_Name, PostOffice.id as HQ_PostOffice_id FROM PostOffice,PostalService WHERE hq=id;
+SELECT name as Employee_Name FROM Employee NATURAL JOIN Person WHERE salary > (SELECT avg(salary) FROM Employee) GROUP BY Employee.vat;
