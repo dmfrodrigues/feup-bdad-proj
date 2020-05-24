@@ -22,7 +22,7 @@ test: clean
 	make testqueries
 	make testtriggers
 
-testqueries: ctt.db
+testqueries: all
 	sqlite3 ctt.db ".read queries/int1.sql"
 	sqlite3 ctt.db ".read queries/int2.sql"
 	sqlite3 ctt.db ".read queries/int3.sql"
@@ -34,7 +34,7 @@ testqueries: ctt.db
 	sqlite3 ctt.db ".read queries/int9.sql"
 	sqlite3 ctt.db ".read queries/int10.sql"
 
-testtriggers: ctt.db	
+testtriggers: all	
 	sqlite3 ctt.db ".read triggers/gatilho1_remove.sql"
 	sqlite3 ctt.db ".read triggers/gatilho2_remove.sql"
 	sqlite3 ctt.db ".read triggers/gatilho3_remove.sql"
