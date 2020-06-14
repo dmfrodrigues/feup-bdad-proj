@@ -10,8 +10,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: apt
-      run: sudo apt install -y texlive-latex-extra latexmk sqlite3
+    - name: Update apt index
+      run: sudo apt update
+
+    - name: Install sqlite3
+      run: sudo apt install -y sqlite3
+
+    - name: Install latex
+      run: sudo apt install -y texlive-latex-extra latexmk
 
     - name: Checkout submodules
       shell: bash

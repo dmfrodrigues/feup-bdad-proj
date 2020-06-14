@@ -14,10 +14,11 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    - name: Update apt index
+      run: sudo apt update
+
     - name: Install sqlite3
-      run: |
-        sudo apt update
-        sudo apt install -y sqlite3
+      run: sudo apt install -y sqlite3
 
     - name: Change permissions
       run: sudo chmod u+x *.sh
