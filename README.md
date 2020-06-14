@@ -2,6 +2,8 @@
 
 ![test](https://github.com/dmfrodrigues/feup-bdad-proj/workflows/test/badge.svg)
 
+![Compile reports](https://github.com/dmfrodrigues/feup-bdad-proj/workflows/Compile%20reports/badge.svg)
+
 - **Project name:** Post office management database
 - **Short description:** Program to create a port office management database, using constraints and triggers
 - **Environment:** SQLite3
@@ -13,6 +15,10 @@
     - [Diogo Miguel Ferreira Rodrigues](https://github.com/dmfrodrigues) (<dmfrodrigues2000@gmail.com> / <diogo.rodrigues@fe.up.pt>)
     - [João António Cardoso Vieira e Basto de Sousa](https://github.com/JoaoASousa) (<up201806613@fe.up.pt>)
     - [Rafael Soares Ribeiro](https://github.com/up201806330) (<up201806330@fe.up.pt>)
+
+# Report
+
+Reports are compiled by Github Actions, to see them go to `Actions > Workflows > Compile reports`, go to the most recent action and check `This run > Artifacts`.
 
 # Notes
 
