@@ -20,6 +20,8 @@
 
 Reports are compiled by Github Actions, to see them go to `Actions > Workflows > Compile reports`, go to the most recent action and check `This run > Artifacts`.
 
+You can always check the most recent release.
+
 # Notes
 
 To create povoar.sql, run
