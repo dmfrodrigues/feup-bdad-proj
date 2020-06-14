@@ -1,4 +1,4 @@
-name: Compile reports
+name: reports
 
 on:
   push:
@@ -9,12 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-    - name: Update apt index
-      run: sudo apt update
-
-    - name: Install sqlite3
-      run: sudo apt install -y sqlite3
 
     - name: Install latex
       run: sudo apt install -y texlive-latex-extra latexmk
@@ -54,6 +48,3 @@ jobs:
       with:
         name: report_delivery3.pdf
         path: report_delivery3.pdf
-
-    - name: testzip
-      run: make testzip

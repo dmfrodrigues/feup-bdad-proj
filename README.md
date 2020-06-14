@@ -2,7 +2,7 @@
 
 ![test](https://github.com/dmfrodrigues/feup-bdad-proj/workflows/test/badge.svg)
 
-![Compile reports](https://github.com/dmfrodrigues/feup-bdad-proj/workflows/Compile%20reports/badge.svg)
+![reports](https://github.com/dmfrodrigues/feup-bdad-proj/workflows/reports/badge.svg)
 
 - **Project name:** Post office management database
 - **Short description:** Program to create a port office management database, using constraints and triggers
@@ -18,7 +18,7 @@
 
 # Report
 
-Reports are compiled by Github Actions, to see them go to `Actions > Workflows > Compile reports`, go to the most recent action and check `This run > Artifacts`.
+Reports are compiled by Github Actions, to see them go to `Actions > Workflows > reports`, go to the most recent action and check `This run > Artifacts`.
 
 You can always check the most recent release.
 

@@ -18,6 +18,9 @@ clean:
 	rm -f ctt.db
 	rm -f povoar.sql
 
+cleanall:
+	git clean -dfX
+
 test: clean
 	make testqueries
 	make testtriggers
@@ -57,9 +60,3 @@ zip: povoar.sql report_delivery3.pdf
 	cp -r queries triggers criar.sql povoar.sql README.md report_delivery3.pdf $(ZIPNAME)
 	zip --symlinks $(ZIPNAME).zip -r $(ZIPNAME)
 	rm -rf $(ZIPNAME)
-
-testzip: zip
-	rm -rf $(DEST)/$(ZIPNAME)
-	unzip $(ZIPNAME).zip -d $(DEST)
-	make -C $(DEST)/$(ZIPNAME)/ test
-	rm -rf $(DEST)/$(ZIPNAME)
