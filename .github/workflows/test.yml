@@ -22,7 +22,7 @@ jobs:
         cd sqlite-autoconf-3320200
         ./configure --prefix=/usr/local
         make
-        make install
+        sudo make install
 
     - name: Change permissions
       run: sudo chmod u+x *.sh
