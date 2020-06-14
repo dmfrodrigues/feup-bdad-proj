@@ -1,0 +1,53 @@
+name: Compile reports
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: apt
+      run: sudo apt install -y texlive-latex-extra latexmk
+
+    - name: Checkout submodules
+      shell: bash
+      run: |
+        # If your submodules are configured to use SSH instead of HTTPS please uncomment the following line
+        # git config --global url."https://github.com/".insteadOf "git@github.com:"
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+    - name: report1
+      run: latexmk --interaction=nonstopmode report_delivery1.tex -pdf
+
+    - name: Upload delivery1 report
+      uses: actions/upload-artifact@v2
+      with:
+        name: report_delivery1.pdf
+        path: report_delivery1.pdf
+
+    - name: report2
+      run: latexmk --interaction=nonstopmode report_delivery2.tex -pdf
+
+    - name: Upload delivery2 report
+      uses: actions/upload-artifact@v2
+      with:
+        name: report_delivery2.pdf
+        path: report_delivery2.pdf
+
+    - name: report3
+      run: latexmk --interaction=nonstopmode report_delivery3.tex -pdf
+
+    - name: Upload delivery3 report
+      uses: actions/upload-artifact@v2
+      with:
+        name: report_delivery3.pdf
+        path: report_delivery3.pdf
+
+    - name: testzip
+      run: make testzip
