@@ -18,9 +18,9 @@
 
 # Report
 
-Reports are compiled by Github Actions, to see them go to `Actions > Workflows > reports`, go to the most recent action and check `This run > Artifacts`.
+Reports are compiled by Github Actions, to see them go to [`Actions`](https://github.com/dmfrodrigues/feup-bdad-proj/actions) > `Workflows` > [`reports`](https://github.com/dmfrodrigues/feup-bdad-proj/actions?query=workflow%3Areports), go to the most recent action and check `This run > Artifacts`.
 
-You can always check the most recent release.
+You can also check the releases.
 
 # Notes
 
@@ -28,3 +28,11 @@ To create povoar.sql, run
 ```bash
 ./create-povoar.sh
 ```
+
+## License
+
+© 2020 Diogo Rodrigues, João António Sousa, Rafael Ribeiro
+
+All files are licensed under [GNU General Public License v3](LICENSE), to the exception of:
+- submodules, which are subject to specific licenses
+- map data, which was extracted from OpenStreetMap under the Open Database License; refer to the report for further details
